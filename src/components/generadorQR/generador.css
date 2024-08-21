@@ -1,0 +1,57 @@
+.extintor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  max-width: 400px;
+  margin: auto;
+}
+
+.extintor-details {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.extintor-details p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.extintor-details p strong {
+  color: #333;
+}
+
+.extintor-image {
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.download-button {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.download-button:hover {
+  background-color: #45a049;
+}
+
+.qr-code-container {
+  margin-bottom: 20px;
+}

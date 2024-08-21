@@ -1,0 +1,135 @@
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 16px;
+}
+
+
+.menu-hidden {
+    transition: left 0.3s ease;
+    background-color: black;
+    height: 54%;
+    width: 50%;
+    display: flex;
+    align-items: flex-start;
+    position: absolute;
+    max-width: 350px;
+    min-width: 200px;
+    left: 0px;
+    
+}
+
+.div1 {
+    columns: 1/2;
+}
+
+.icono {
+    color: rgb(217, 217, 217);
+    margin-top: -3px;
+}
+
+.ul {
+    width: 100%;
+  padding: 0;
+}
+
+ul .elemento {
+    margin-top: 30px;
+    width: 100%;
+    
+}
+
+ul a {
+    color: rgb(217, 217, 217);
+    font-size: 18px;
+    display: block;
+    padding: 5px 0px;
+    text-decoration: none;
+}
+
+ul li .subm2 {
+    margin-left: 7px;
+    width: 50%;
+    
+
+}
+
+.subm2 li a {
+    color: rgb(142, 142, 142);
+    text-decoration: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.218);
+    margin-top: 5px;
+    
+}
+
+ul li ul {
+    height: 0px;
+    overflow: hidden;
+    transition: 0.4s;
+    width: 57%;
+    
+
+}
+
+.text p {
+    margin: 0 0 0px 10px;
+    padding: 0;
+    columns: 2/3;
+    width: 100%;
+    color: white;
+}
+
+
+.text {
+    width: 90%;
+    margin-left: 10px;
+    font-size: 18px;
+    display: grid;
+    grid-template-columns: 10% 85% 5%;
+}
+
+.faAngle {
+    font-size: 18px;
+    color: white;
+
+}
+
+#check:checked~ul {
+    height: 130px;
+    width: 70%;
+    
+}
+
+@media (min-width:769px) {
+    ul li ul {
+        width: 42%;
+    }
+
+    ul li .subm2 {
+        margin-left: 48px;
+    }
+
+}
+
+@media (min-width: 1025px) {
+    .subm2 li a:hover {
+        transition: 0.3s;
+        color: white;
+    }
+
+
+    ul .elemento:hover .text,
+    .icono {
+        color: white;
+        font-weight: 600;
+    }
+
+    ul .elemento1:hover .submenu {
+        height: 133px;
+        width: 52%;
+        margin-left: 17px;
+    }
+
+
+}

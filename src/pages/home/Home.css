@@ -1,0 +1,194 @@
+* {
+  margin: 0;
+  padding: 0;
+  
+  box-sizing: border-box;
+}
+body{
+  background: #EFEFEF;
+}
+
+.contenedor2 {
+
+  height: 100%;
+  width: 100%;
+  background: #EFEFEF;
+  display: grid;
+  grid-template-columns:100%;
+  grid-template-rows: 10% 90%;
+
+}
+
+/* Estilo modificado del select cuando el checkbox está marcado */
+
+#nav_check:checked ~ nav {
+  left: 0;
+}
+.barraMenu{
+  width: 100%;
+  height: 100%;
+  grid-column: 3/4;
+  display: flex;
+}
+.faBars{
+  width: 2.4rem;
+  height: 2.4rem;
+  margin: auto;
+  
+}
+.centro{
+
+  width: 100%;
+  height: 100vh;
+  grid-row: 2/3;
+  
+  margin-left: 0px;
+}
+
+.navegacion {
+  background-color: black;
+  height: 70%;
+  width: 50%;
+  max-width: 350px;
+  min-width: 200px; 
+  left: -300px; 
+  transition: 0.2s;
+/*   display: grid;
+  grid-template-rows: 80% 20%;  */
+  position: absolute;
+}
+
+.geyseImagen{
+  width: 100%;
+  height: 100%;
+  
+}
+.logoGeyse{
+  width: 100%;
+  height: 80%;
+  margin: 10px 0px 0px 15px;
+  
+}
+
+.barraSup {
+  width: 100%;
+  height: 100%;
+  background: rgb(184, 184, 184);
+  grid-row: 1/2;
+  display: grid;
+  grid-template-columns: 40% 40% 20%;
+}
+.imgPerfil{
+  display: none;
+}
+
+
+
+/* @media (min-width: 300px) and (min-height: 800px) {
+  .navegacion{
+    max-width: 300px;
+    height: 53%;
+  }
+
+}
+
+@media (min-width: 420px) and (min-height: 913px) {
+  .navegacion{
+    max-width: 300px;
+    height: 45%;
+  }
+} */
+@media (min-width: 550px){
+  .navegacion{
+    max-width: 300px;
+    height: 80%;
+
+  }
+  .logoGeyse{
+    width: 80%;
+    height: 60%;
+    margin: 13px 0px 0px 15px;
+    
+  }
+  .centro {
+    
+    grid-template-columns: 40% 60%;
+  }
+
+  .contenedor2{
+    grid-template-rows: 15% 85%;
+  }
+  
+}
+
+@media (orientation: landscape) {
+  .navegacion{
+    max-width: 300px;
+    height: 168%;
+  }
+  .imgPerfil{
+    grid-column: 3/4;
+  }
+  .contenedor2 {
+    grid-template-rows: 20% 80%;
+  
+  }
+
+}
+@media (min-width: 769px) { 
+  .imgPerfil{
+    grid-column: 3/4;
+    grid-row: 1/2;
+    display: flex;
+    width: 250px;
+    margin-left: 70px;
+    height: 80px;
+    margin-top: 20px;
+
+  }
+  .nombres {
+    width: 60%;
+
+  }
+  
+  .nombres p {
+    font-size: 15px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    text-align:left;
+    margin-left: 10px;
+    color: white;
+  
+    margin-bottom: 0;
+  }
+  .logoGeyse{
+    width: 30%;
+    height: 70%;
+    margin-left: 50px;
+    margin-top: 20px;
+    
+  }
+  .contenedor2 {
+    grid-template-rows: 12% 88%;
+  }
+  .centro {
+    display: grid;
+    grid-template-columns: 20% 80%;
+  }
+  .navegacion{
+    left: 0;
+    width: 100%;
+    position: static;
+    height: 100%;
+  
+    max-width: 350px;
+    
+  }
+  .barraMenu{
+    display: none;
+  }
+  .imgPerfil{
+    grid-column: 3/4;
+  }
+
+}
