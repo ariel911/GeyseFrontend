@@ -21,6 +21,7 @@ const Usuario = () => {
   const [nuevaClave, setNuevaClave] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     handleGetUsers();
@@ -59,7 +60,9 @@ const Usuario = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/usuarios",
       method: "GET",
-
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     setUsuarios(res.data.data.usuarios);
   };
@@ -67,6 +70,7 @@ const Usuario = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/rol",
       method: "GET",
+      
     });
     setRoles(res.data.data.rol);
   };

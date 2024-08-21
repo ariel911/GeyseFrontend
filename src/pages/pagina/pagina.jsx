@@ -11,7 +11,8 @@ import Locations from './locations/locations';
 import Contact from './contact/contact';
 import Footer from './footer/footer';
 /* import { Link } from 'react-router-dom'; */
-
+import WhatsAppButton from './botonesFlotantes/whatsapp';
+import FacebookButton from './botonesFlotantes/FacebookButton';
 
 const Pagina = () => {
   return (
@@ -24,6 +25,8 @@ const Pagina = () => {
       <Locations />
       <Contact />
       <Footer />
+      <WhatsAppButton />
+      <FacebookButton />
      {/*  <Link to="https://api.whatsapp.com/send?phone=+59175458332" class="btn-wsp" target="_blank">
         <FontAwesomeIcon icon="fa-brands fa-square-whatsapp" />
       </Link> */}
