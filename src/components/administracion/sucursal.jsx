@@ -17,6 +17,8 @@ const sucursal = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedClienteEdit, setSelectedClienteEdit] = useState(null);
 
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
         handleGetUsers();
 
@@ -57,7 +59,9 @@ const sucursal = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/sucursal",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setsucursals(res.data.data.sucursal);
     };
@@ -65,7 +69,9 @@ const sucursal = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/cliente",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setClientes(res.data.data.clientes);
     };
@@ -102,7 +108,9 @@ const sucursal = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/sucursal/baja/${sucursal.id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 1,
 
@@ -117,7 +125,7 @@ const sucursal = () => {
             icon: "success",
             button: "Ok",
         });
-        
+
     }
     const handleDarBaja = async (sucursal) => {
 
@@ -125,7 +133,9 @@ const sucursal = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/sucursal/baja/${sucursal.id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 0,
 
@@ -148,6 +158,9 @@ const sucursal = () => {
             await axios({
                 url: `https://backendgeyse.onrender.com/api/sucursal/${selectedUser.id}`,
                 method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 data: {
                     nombre_sucursal: document.getElementById('nombre2').value,
                     nombre_encargado: document.getElementById('nombre_encargado2').value,
@@ -192,6 +205,11 @@ const sucursal = () => {
                     codigo,
                     clienteId: selectedClientes.value
                 },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
 
             // Limpiar los campos del formulario
@@ -221,10 +239,12 @@ const sucursal = () => {
         setSelectedCliente(selectedOption);
     };
 
-    const roleOptions = clientes?.map((cliente) => ({
-        value: cliente.id,
-        label: cliente.nombre_cliente
-    }));
+    const ClientesOptions = clientes
+        ?.filter(cliente => cliente.estado === 1) // Filtra los clientes con estado 1
+        .map((cliente) => ({
+            value: cliente.id,
+            label: cliente.nombre_cliente
+        }));
 
 
     const handleChangeBuscador = (e) => {
@@ -294,7 +314,7 @@ const sucursal = () => {
                                         id="sucursal"
                                         value={selectedClientes}
                                         onChange={handleChange}
-                                        options={roleOptions}
+                                        options={ClientesOptions}
                                         placeholder="Seleccione"
                                         className=""
                                     />
@@ -306,14 +326,14 @@ const sucursal = () => {
                                         Agregar
                                     </button>
                                 </div>
-                                
+
                             </div>
                         </form>
                     </div>
                 </div>
 
                 <div className="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-                    
+
                     <form className="d-flex buscador" role="search">
                         <input
                             type="text"
@@ -355,39 +375,39 @@ const sucursal = () => {
                 </div>
 
                 <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
-                    
-                        <div className="table table-responsive tablaSucursal">
-                            <table className="table">
-                                <thead className="table-dark">
-                                    <tr>
-                                        <th scope="col">Nº</th>
-                                        <th scope="col">Sucursal</th>
-                                        <th scope="col">Encargado</th>
-                                        <th scope="col">Fecha Registro</th>
-                                        <th scope="col">Ubicación</th>
-                                        
-                                        <th scope="col ">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {sucursals?.map((sucursal, index) => sucursal.estado === 0 && (
-                                        <tr key={sucursal.id}>
-                                            <td>{index + 1}</td>
-                                            <td>{sucursal.nombre_sucursal}</td>
-                                            <td>{sucursal.nombre_encargado}</td>
-                                            <td>{sucursal.fecha_registro.slice(0, 10)}</td>
-                                            <td>{sucursal.ubicacion}</td>
-                                            
-                                            <td>
-                                                <button className='btn btn-danger boton2' onClick={() => handleDarReintegrar(sucursal)}>Reintegrar</button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
 
-                        </div>
-                    
+                    <div className="table table-responsive tablaSucursal">
+                        <table className="table">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th scope="col">Nº</th>
+                                    <th scope="col">Sucursal</th>
+                                    <th scope="col">Encargado</th>
+                                    <th scope="col">Fecha Registro</th>
+                                    <th scope="col">Ubicación</th>
+
+                                    <th scope="col ">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {sucursals?.map((sucursal, index) => sucursal.estado === 0 && (
+                                    <tr key={sucursal.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{sucursal.nombre_sucursal}</td>
+                                        <td>{sucursal.nombre_encargado}</td>
+                                        <td>{sucursal.fecha_registro.slice(0, 10)}</td>
+                                        <td>{sucursal.ubicacion}</td>
+
+                                        <td>
+                                            <button className='btn btn-danger boton2' onClick={() => handleDarReintegrar(sucursal)}>Reintegrar</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                    </div>
+
                 </div>
 
                 {/* Modal Editar */}
@@ -423,12 +443,12 @@ const sucursal = () => {
                                     <div className="mb-3">
                                         <label htmlFor="codigo" className="col-form-label">Cliente</label>
                                         <Select
-                                        value={selectedClienteEdit}
-                                        onChange={handleChangeClienteEdit}
-                                        options={roleOptions}
-                                        placeholder="Seleccione un cliente"
-                                        className=""
-                                    />
+                                            value={selectedClienteEdit}
+                                            onChange={handleChangeClienteEdit}
+                                            options={ClientesOptions}
+                                            placeholder="Seleccione un cliente"
+                                            className=""
+                                        />
                                     </div>
                                     <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

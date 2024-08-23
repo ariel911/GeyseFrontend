@@ -29,6 +29,7 @@ const QrScannerComponent = () => {
     const [fecha_inspeccion, setfecha_inspeccion] = useState('');
 
     const usuarioId = localStorage.getItem('usuarioId');
+    const token = localStorage.getItem('token');
 
     const handleScanButtonClick = () => {
         setIsScanning(true);
@@ -52,7 +53,9 @@ const QrScannerComponent = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/estado",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setestados(res.data.data.estado);
     };
@@ -60,7 +63,9 @@ const QrScannerComponent = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/inspeccion",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         const filteredInspecciones = res.data.data.inspecion.filter(inspeccion => inspeccion.extintor.id === extintor.id);
         setInspecciones(filteredInspecciones);
@@ -69,7 +74,13 @@ const QrScannerComponent = () => {
         if (extintor) {
             const codigoEmpresa = extintor.codigo_empresa; // El código de empresa proporcionado por el QR
 
-            fetch('https://backendgeyse.onrender.com/api/extintor')
+            fetch('https://backendgeyse.onrender.com/api/extintor', {
+                method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     const extintores = data.data.extintor;
@@ -91,7 +102,13 @@ const QrScannerComponent = () => {
                         setExtintoresCliente(filteredExtintoresCliente);
 
                         // Fetch inspecciones del extintor
-                        fetch('https://backendgeyse.onrender.com/api/inspeccion')
+                        fetch('https://backendgeyse.onrender.com/api/inspeccion', {
+                            method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        })
                             .then(response => response.json())
                             .then(data => {
                                 const filteredInspecciones = data.data.inspecion.filter(inspeccion => inspeccion.extintor.id === extintorData.id);
@@ -100,7 +117,13 @@ const QrScannerComponent = () => {
                             .catch(error => console.error('Error fetching inspecciones:', error));
 
                         // Fetch servicios del extintor
-                        fetch('https://backendgeyse.onrender.com/api/servicio')
+                        fetch('https://backendgeyse.onrender.com/api/servicio', {
+                            method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        })
                             .then(response => response.json())
                             .then(data => {
                                 const filteredServicios = data.data.servicio.filter(servicio => servicio.extintor.id === extintorData.id);
@@ -152,7 +175,13 @@ const QrScannerComponent = () => {
                     }).then(() => {
                         const codigoEmpresa = decodedText; // El código de empresa proporcionado por el QR
 
-                        fetch('https://backendgeyse.onrender.com/api/extintor')
+                        fetch('https://backendgeyse.onrender.com/api/extintor', {
+                            method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                            
+                            }
+                        })
                             .then(response => response.json())
                             .then(data => {
                                 const extintores = data.data.extintor;
@@ -174,7 +203,13 @@ const QrScannerComponent = () => {
                                     setExtintoresCliente(filteredExtintoresCliente);
 
                                     // Fetch inspecciones del extintor
-                                    fetch('https://backendgeyse.onrender.com/api/inspeccion')
+                                    fetch('https://backendgeyse.onrender.com/api/inspeccion', {
+                                        method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                                        headers: {
+                                            'Authorization': `Bearer ${token}`,
+                                          
+                                        }
+                                    })
                                         .then(response => response.json())
                                         .then(data => {
                                             const filteredInspecciones = data.data.inspecion.filter(inspeccion => inspeccion.extintor.id === extintorData.id);
@@ -183,7 +218,13 @@ const QrScannerComponent = () => {
                                         .catch(error => console.error('Error fetching inspecciones:', error));
 
                                     // Fetch servicios del extintor
-                                    fetch('https://backendgeyse.onrender.com/api/servicio')
+                                    fetch('https://backendgeyse.onrender.com/api/servicio', {
+                                        method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                                        headers: {
+                                            'Authorization': `Bearer ${token}`,
+                                          
+                                        }
+                                    })
                                         .then(response => response.json())
                                         .then(data => {
                                             const filteredServicios = data.data.servicio.filter(servicio => servicio.extintor.id === extintorData.id);
@@ -265,7 +306,7 @@ const QrScannerComponent = () => {
         e.preventDefault();
         // Realizar la solicitud para agregar el inspeccion
         const selectedEstados = selectedEstado.map((option) => option.value);
-        console.log('idExtintor:',extintor.id,fecha_inspeccion,observaciones,usuarioId,selectedEstados)
+        console.log('idExtintor:', extintor.id, fecha_inspeccion, observaciones, usuarioId, selectedEstados)
 
         try {
             const response = await axios.post(
@@ -277,13 +318,17 @@ const QrScannerComponent = () => {
                     usuarioId: usuarioId,
                     extintorId: extintor.id,
                     estados: selectedEstados
+                }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
                 },
+            }
             );
             setfecha_inspeccion('');
             setobservaciones('');
             handleGetInspecciones();
             setselectedEstado([])
-           
+
             swal({
                 title: "Inspeccion Agregado!",
                 icon: "success",
@@ -522,40 +567,40 @@ const QrScannerComponent = () => {
 
                                 {/* Pestaña Agregar Inspección */}
 
-                                
-                                    <form onSubmit={handleSubmit} className="justify-content-center align-self-center">
-                                        <div className='row row-cols-2 row-cols-md-3 row-cols-lg-4'>
-                                            <div className='mb-4 col'>
-                                                <label htmlFor="recipient-name" className="form-label">Fecha Insp.</label>
-                                                <input type="datetime-local" className="form-control" value={fecha_inspeccion} onChange={(e) => setfecha_inspeccion(e.target.value)} required />
-                                            </div>
-                                            <div className="mb-3 col">
-                                                <label htmlFor="rol" className="form-label ">Desperfectos</label>
-                                                <Select
-                                                    id="rol"
-                                                    closeMenuOnSelect={false}
-                                                    value={selectedEstado}
-                                                    options={estadOptions}
-                                                    onChange={handleChange}
-                                                    placeholder="Seleccione"
-                                                    isMulti
-                                                    className=""
-                                                    MenuList
 
-                                                />
-                                            </div>
-                                            <div className="mb-3 col">
-                                                <label htmlFor="observaciones" className="form-label">Observaciones</label>
-                                                <input type="text" className="form-control " id="observaciones" value={observaciones} onChange={(e) => setobservaciones(e.target.value)} required />
-                                            </div>
+                                <form onSubmit={handleSubmit} className="justify-content-center align-self-center">
+                                    <div className='row row-cols-2 row-cols-md-3 row-cols-lg-4'>
+                                        <div className='mb-4 col'>
+                                            <label htmlFor="recipient-name" className="form-label">Fecha Insp.</label>
+                                            <input type="datetime-local" className="form-control" value={fecha_inspeccion} onChange={(e) => setfecha_inspeccion(e.target.value)} required />
                                         </div>
-                                        <div className=" mt-3 botones">
-                                            <div className="">
-                                                <button type="submit" className="btn btn-primary botoninspeccion">Agregar</button>
-                                            </div>
+                                        <div className="mb-3 col">
+                                            <label htmlFor="rol" className="form-label ">Desperfectos</label>
+                                            <Select
+                                                id="rol"
+                                                closeMenuOnSelect={false}
+                                                value={selectedEstado}
+                                                options={estadOptions}
+                                                onChange={handleChange}
+                                                placeholder="Seleccione"
+                                                isMulti
+                                                className=""
+                                                MenuList
 
+                                            />
                                         </div>
-                                    </form>
+                                        <div className="mb-3 col">
+                                            <label htmlFor="observaciones" className="form-label">Observaciones</label>
+                                            <input type="text" className="form-control " id="observaciones" value={observaciones} onChange={(e) => setobservaciones(e.target.value)} required />
+                                        </div>
+                                    </div>
+                                    <div className=" mt-3 botones">
+                                        <div className="">
+                                            <button type="submit" className="btn btn-primary botoninspeccion">Agregar</button>
+                                        </div>
+
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

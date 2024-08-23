@@ -29,8 +29,9 @@ const extintor = () => {
     const [fecha_registro, setfecha_registro] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
-
+    const token = localStorage.getItem('token');
     const usuario_Id = localStorage.getItem('id');
+
     useEffect(() => {
         handleGetExtintores();
         handleGetTipos();
@@ -76,7 +77,9 @@ const extintor = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/extintor",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setextintores(res.data.data.extintor);
     };
@@ -84,7 +87,9 @@ const extintor = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/tipo",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setTipo(res.data.data.tipo);
     };
@@ -92,7 +97,9 @@ const extintor = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/sucursal",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setsucursales(res.data.data.sucursal);
     };
@@ -156,7 +163,9 @@ const extintor = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/extintor/baja/${extintor.id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 1,
 
@@ -170,7 +179,7 @@ const extintor = () => {
             title: `Extintor ${extintor.codigo_empresa} reintegrado`,
             icon: "success",
             button: "Ok",
-          });
+        });
     }
     const handleDarBaja = async (extintor) => {
 
@@ -178,7 +187,9 @@ const extintor = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/extintor/baja/${extintor.id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 0,
 
@@ -192,7 +203,7 @@ const extintor = () => {
             title: `Extintor ${extintor.codigo_empresa} dado de baja`,
             icon: "success",
             button: "Ok",
-          });
+        });
     }
     const handleUpdateUser = async (e) => {
 
@@ -202,6 +213,9 @@ const extintor = () => {
             await axios({
                 url: `https://backendgeyse.onrender.com/api/extintor/${selectedUser.id}`,
                 method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 data: {
                     marca: document.getElementById('marca2').value,
                     capacidad: document.getElementById('capacidad2').value,
@@ -256,6 +270,11 @@ const extintor = () => {
                     sucursalId: selectedsucursales.value,
                     tipoId: selectedtipo.value
                 },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
 
             // Limpiar los campos del formulario
@@ -516,7 +535,7 @@ const extintor = () => {
 
                 </div>
                 {/* Detalles */}
-             
+
                 <div className="modal fade" id="modalDetalle" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">

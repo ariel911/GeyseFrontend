@@ -70,7 +70,9 @@ const Usuario = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/rol",
       method: "GET",
-      
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     setRoles(res.data.data.rol);
   };
@@ -101,7 +103,9 @@ const Usuario = () => {
     await axios({
       url: `https://backendgeyse.onrender.com/api/usuarios/baja/${usuario.id}`,
       method: "PUT",
-
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       data: {
         estado: 1,
 
@@ -117,13 +121,37 @@ const Usuario = () => {
       button: "Ok",
     });
   }
+  const handleDarEliminar = async (usuario) => {
+    await axios({
+      url: `https://backendgeyse.onrender.com/api/usuarios/baja/${usuario.id}`,
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        estado: 3,
+
+      },
+    }).then((response) => {
+      // Accede a la respuesta de la API
+      console.log("Respuesta de la API:", response.data);
+    });
+    handleGetUsers();
+    swal({
+      title: `Usuario ${usuario.nombre_usuario} Eliminado`,
+      icon: "success",
+      button: "Ok",
+    });
+  }
   const handleDarBaja = async (usuario) => {
 
     // Restablecer los campos del formulario
     await axios({
       url: `https://backendgeyse.onrender.com/api/usuarios/baja/${usuario.id}`,
       method: "PUT",
-
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       data: {
         estado: 0,
 
@@ -141,35 +169,48 @@ const Usuario = () => {
   }
   const handleUpdateUser = async (e) => {
     e.preventDefault();
-    console.log("nombre", selectedRole2?.value)
-    console.log("n", selectedRole?.value)
-    try {
-      await axios.put(`https://backendgeyse.onrender.com/api/usuarios/${selectedUser.id}`, {
+    console.log("nombre", selectedRole2?.label)
+    console.log("nombre", selectedUser.rol)
+    console.log("n1", document.getElementById('nombre2').value)
+    console.log("n", document.getElementById('apellido2').value)
+    console.log("n", document.getElementById('fecha_registro2').value)
+    console.log("n", document.getElementById('correo2').value)
+
+    await axios({
+      url: `https://backendgeyse.onrender.com/api/usuarios/${selectedUser.id}`,
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
         nombre_usuario: document.getElementById('nombre2').value,
         apellido: document.getElementById('apellido2').value,
         fecha_registro: document.getElementById('fecha_registro2').value,
         correo: document.getElementById('correo2').value,
         rolId: selectedRole2?.value,
-      });
+      }
+    }).then((response) => {
+      // Accede a la respuesta de la API
+      console.log("Respuesta de la API:", response.data);
+    });
 
-      // Update the user in the local state
-      const updatedUsuarios = usuarios.map((usuario) =>
-        usuario.id === selectedUser.id ? { ...usuario, ...selectedUser, rol: { ...selectedUser.rol, nombre_rol: selectedRole2.label } } : usuario
-      );
+    // Update the user in the local state
+    const updatedUsuarios = usuarios.map((usuario) =>
+      usuario.id === selectedUser.id ? { ...usuario, ...selectedUser, rol: { ...selectedUser.rol, nombre_rol: selectedRole2.label } } : usuario
+    );
+    console.log("usuarios:", usuarios)
+    setUsuarios(updatedUsuarios);
+    console.log("usuariosDespues:", usuarios)
+    // Close the modal
+    setSelectedUser(null);
+    setSelectedRole2(null);
+    handleGetUsers();
+    swal({
+      title: "Usuario Editado Correctamente!",
+      icon: "success",
+      button: "Ok",
+    });
 
-      setUsuarios(updatedUsuarios);
-      // Close the modal
-      setSelectedUser(null);
-      setSelectedRole2(null);
-      handleGetUsers();
-      swal({
-        title: "Usuario Editado Correctamente!",
-        icon: "success",
-        button: "Ok",
-      });
-    } catch (error) {
-      // Opcional: Mostrar una notificación o mensaje de error
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -188,6 +229,11 @@ const Usuario = () => {
           estado: 1,
           rolId: selectedRole.value
         },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       // Limpiar los campos del formulario
@@ -223,10 +269,12 @@ const Usuario = () => {
     console.log("user2", selectedOption)
   };
 
-  const roleOptions = roles?.map((rol) => ({
-    value: rol.id,
-    label: rol.nombre_rol
-  }));
+  const roleOptions = roles
+    ?.filter(rol => rol.estado === 1) // Filtra los roles con estado 1
+    .map((rol) => ({
+      value: rol.id,
+      label: rol.nombre_rol
+    }));
 
   const handleChangeBuscador = (e) => {
     setSearchTerm(e.target.value);
@@ -241,6 +289,10 @@ const Usuario = () => {
     console.log("usuario:", selectedUser.id)
     try {
       await axios.put(`https://backendgeyse.onrender.com/api/usuarios/cambiar-contrasena/${selectedUser.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }, {
         clave: nuevaClave,
       });
 
@@ -485,7 +537,8 @@ const Usuario = () => {
                       <td>{usuario.fecha_registro.slice(0, 10)}</td>
                       <td>{usuario?.rol?.nombre_rol}</td>
                       <td className="accion">
-                        <button className="btn btn-danger boton2" onClick={() => handleDarReintegrar(usuario)}>Reintegrar</button>
+                        <button className="btn btn-success boton2" onClick={() => handleDarReintegrar(usuario)}>Reintegrar</button>
+                        <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(usuario)}>Eliminar</button>
                       </td>
                     </tr>
                   ))}

@@ -14,11 +14,16 @@ const NavBar = ({ brand }) => {
     const [isMenuHidden, setMenuHidden] = useState(false);
     const [menuPermissions, setMenuPermissions] = useState([]);
     const navigate = useNavigate(); // Hook para la navegación
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchUserPermissions = async () => {
             try {
-                const res = await axios.get("https://backendgeyse.onrender.com/api/usuarios");
+                const res = await axios.get("https://backendgeyse.onrender.com/api/usuarios", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 const currentUser = res.data.data.usuarios.find(user => user.id === id);
                 if (currentUser) {
                     const permissions = currentUser.rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu);
@@ -49,7 +54,7 @@ const NavBar = ({ brand }) => {
     return (
         <nav className={`navegacion ${isMenuHidden ? 'menu-show' : 'menu-hidden'}`}>
             <ul className='ul'>
-                {((menuPermissions.includes('usuarios')|| (menuPermissions.includes('cargos')) || (menuPermissions.includes('clientes')) ||(menuPermissions.includes('sucursales'))) || menuPermissions.includes('todo')) && (
+                {((menuPermissions.includes('usuarios') || (menuPermissions.includes('cargos')) || (menuPermissions.includes('clientes')) || (menuPermissions.includes('sucursales'))) || menuPermissions.includes('todo')) && (
                     <li className='elemento elemento1'>
                         <label htmlFor="check" className='text barraSubMenu'>
                             <div className='div1'>

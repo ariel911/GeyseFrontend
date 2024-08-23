@@ -7,7 +7,7 @@ const ExportExcel = () => {
     const [extintores, setExtintores] = useState([]);
     const [servicios, setServicios] = useState([]);
     const [inspecciones, setInspecciones] = useState([]);
-
+    const token = localStorage.getItem('token');
     useEffect(() => {
         handleGetExtintores();
         handleGetServicios();
@@ -19,6 +19,9 @@ const ExportExcel = () => {
             const res = await axios({
                 url: "https://backendgeyse.onrender.com/api/extintor",
                 method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
             setExtintores(res.data.data.extintor);
         } catch (error) {
@@ -31,6 +34,9 @@ const ExportExcel = () => {
             const res = await axios({
                 url: "https://backendgeyse.onrender.com/api/servicio",
                 method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
             setServicios(res.data.data.servicio);
         } catch (error) {
@@ -43,6 +49,9 @@ const ExportExcel = () => {
             const res = await axios({
                 url: "https://backendgeyse.onrender.com/api/inspeccion",
                 method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
             setInspecciones(res.data.data.inspecion);
         } catch (error) {
@@ -67,7 +76,7 @@ const ExportExcel = () => {
 
     const handleExportToExcel = async () => {
         const workbook = new ExcelJS.Workbook();
-    
+
         // Crear la primera hoja de extintores
         const worksheet1 = workbook.addWorksheet('Extintores');
         worksheet1.columns = [
@@ -82,7 +91,7 @@ const ExportExcel = () => {
             { header: 'Fecha Registro', key: 'fecha_registro', width: 20 },
             { header: 'Cliente', key: 'cliente', width: 20 },
         ];
-    
+
         // Ordenar los extintores por nombre de cliente
         const sortedExtintores = extintores
             .filter(extintor => extintor.estado === 1)
@@ -91,7 +100,7 @@ const ExportExcel = () => {
                 const nameB = b?.sucursal?.cliente?.nombre_cliente?.toLowerCase() || '';
                 return nameA.localeCompare(nameB);
             });
-    
+
         const extintorRows = sortedExtintores.map((extintor, index) => {
             return {
                 numero: index + 1,
@@ -106,9 +115,9 @@ const ExportExcel = () => {
                 cliente: extintor?.sucursal?.cliente?.nombre_cliente || 'N/A'
             };
         });
-    
+
         worksheet1.addRows(extintorRows);
-    
+
         // Agrupar y añadir filas para las hojas de Servicios e Inspecciones (sin modificar)
         const groupedServicios = groupByClienteAndSucursal(servicios.filter(servicio => servicio.estado === 1));
         const worksheet2 = workbook.addWorksheet('Servicios');
@@ -121,30 +130,30 @@ const ExportExcel = () => {
             { header: 'Proximo PH', key: 'proximo_ph', width: 20 },
             { header: 'Proximo Mantenimiento', key: 'proximo_mantenimiento', width: 20 },
         ];
-    
-        let rowIndexServicios = 1; 
+
+        let rowIndexServicios = 1;
         const empresaToRowMap = {};
-    
+
         Object.keys(groupedServicios).forEach(cliente => {
             rowIndexServicios++;
             worksheet2.addRow([`Cliente: ${cliente}`]).font = { bold: true };
-    
+
             Object.keys(groupedServicios[cliente]).forEach(sucursal => {
                 rowIndexServicios++;
                 worksheet2.addRow([`Sucursal: ${sucursal}`]).font = { bold: false, italic: true };
-    
+
                 groupedServicios[cliente][sucursal].forEach((servicio, index) => {
                     rowIndexServicios++;
                     worksheet2.addRow({
                         numero: index + 1,
-                        trabajos:servicio.servicio_trabajos.map(servicioTrabajo => servicioTrabajo.trabajo.nombre_trabajo).join(', '),
+                        trabajos: servicio.servicio_trabajos.map(servicioTrabajo => servicioTrabajo.trabajo.nombre_trabajo).join(', '),
                         fecha_servicio: servicio.fecha_servicio ? servicio.fecha_servicio.slice(0, 10) : 'N/A',
                         codigo_extintor: servicio.extintor.codigo_extintor || 'N/A',
                         codigo_empresa: servicio.extintor.codigo_empresa || 'N/A',
                         proximo_ph: servicio.proximo_ph ? servicio.proximo_ph.slice(0, 10) : 'N/A',
                         proximo_mantenimiento: servicio.proximo_mantenimiento ? servicio.proximo_mantenimiento.slice(0, 10) : 'N/A',
                     });
-    
+
                     const codigoEmpresa = servicio.extintor.codigo_empresa;
                     if (!empresaToRowMap[codigoEmpresa]) {
                         empresaToRowMap[codigoEmpresa] = rowIndexServicios;
@@ -152,7 +161,7 @@ const ExportExcel = () => {
                 });
             });
         });
-    
+
         const groupedInspecciones = groupByClienteAndSucursal(inspecciones.filter(inspeccion => inspeccion.estado === 1));
         const worksheet3 = workbook.addWorksheet('Inspecciones');
         worksheet3.columns = [
@@ -162,18 +171,18 @@ const ExportExcel = () => {
             { header: 'Cod. Extintor', key: 'codigo_extintor', width: 20 },
             { header: 'Observaciones', key: 'observaciones', width: 30 },
         ];
-    
-        let rowIndexInspecciones = 1; 
+
+        let rowIndexInspecciones = 1;
         const extintorToRowMap = {};
-    
+
         Object.keys(groupedInspecciones).forEach(cliente => {
             rowIndexInspecciones++;
             worksheet3.addRow([`Cliente: ${cliente}`]).font = { bold: true };
-    
+
             Object.keys(groupedInspecciones[cliente]).forEach(sucursal => {
                 rowIndexInspecciones++;
                 worksheet3.addRow([`Sucursal: ${sucursal}`]).font = { bold: false, italic: true };
-    
+
                 groupedInspecciones[cliente][sucursal].forEach((inspeccion, index) => {
                     rowIndexInspecciones++;
                     worksheet3.addRow({
@@ -183,7 +192,7 @@ const ExportExcel = () => {
                         codigo_extintor: inspeccion.extintor.codigo_extintor || 'N/A',
                         observaciones: inspeccion.observaciones || 'N/A',
                     });
-    
+
                     const codigoExtintor = inspeccion.extintor.codigo_extintor;
                     if (!extintorToRowMap[codigoExtintor]) {
                         extintorToRowMap[codigoExtintor] = rowIndexInspecciones;
@@ -191,7 +200,7 @@ const ExportExcel = () => {
                 });
             });
         });
-    
+
         // Add hyperlinks
         sortedExtintores.forEach((extintor, index) => {
             const cellEmpresa = worksheet1.getCell(`C${index + 2}`);
@@ -199,25 +208,25 @@ const ExportExcel = () => {
             if (rowInServicios) {
                 cellEmpresa.value = { text: extintor.codigo_empresa, hyperlink: `#Servicios!E${rowInServicios}` };
             }
-    
+
             const cellExtintor = worksheet1.getCell(`B${index + 2}`);
             const rowInInspecciones = extintorToRowMap[extintor.codigo_extintor];
             if (rowInInspecciones) {
                 cellExtintor.value = { text: extintor.codigo_extintor, hyperlink: `#Inspecciones!D${rowInInspecciones}` };
             }
         });
-    
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: 'application/octet-stream' });
-    
+
         saveAs(blob, 'Extintores_Servicios_Inspecciones.xlsx');
     };
 
     return (
         <div>
-           
+
             <button className='btn btn-primary' onClick={handleExportToExcel}>Download as XLSX</button>
-        
+
         </div>
     );
 }

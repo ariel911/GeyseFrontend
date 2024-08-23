@@ -21,8 +21,9 @@ const servicio = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
     const [editSelectedTrabajo, setEditSelectedTrabajo] = useState([]);
-    const usuario_Id = localStorage.getItem('id');
 
+    const usuario_Id = localStorage.getItem('id');
+    const token = localStorage.getItem('token');
     useEffect(() => {
         handleGetservicios();
         handleGetextintors();
@@ -65,7 +66,9 @@ const servicio = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/servicio",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setservicios(res.data.data.servicio);
     };
@@ -73,7 +76,9 @@ const servicio = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/extintor",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setextintor(res.data.data.extintor);
     };
@@ -81,7 +86,9 @@ const servicio = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/trabajo",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setestados(res.data.data.trabajo);
     };
@@ -129,7 +136,9 @@ const servicio = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/servicio/baja/${id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 1,
 
@@ -143,7 +152,7 @@ const servicio = () => {
             title: `Servicio dado de baja`,
             icon: "success",
             button: "Ok",
-          });
+        });
     }
     const handleDarBaja = async (id) => {
 
@@ -151,7 +160,9 @@ const servicio = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/servicio/baja/${id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 0,
 
@@ -165,7 +176,7 @@ const servicio = () => {
             title: `Servicio Reintegrado`,
             icon: "success",
             button: "Ok",
-          });
+        });
     }
     const handleUpdateUser = async (e) => {
 
@@ -175,6 +186,9 @@ const servicio = () => {
             await axios({
                 url: `https://backendgeyse.onrender.com/api/servicio/${selectedUser.id}`,
                 method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 data: {
                     fecha_servicio: document.getElementById('fecha_servicio2').value,
                     proximo_ph: document.getElementById('proximo_ph2').value,
@@ -224,6 +238,11 @@ const servicio = () => {
                     extintorId: selectedOption.value,
                     trabajos: selectedEstados
                 },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
 
             // Limpiar los campos del formulario
@@ -593,7 +612,7 @@ const servicio = () => {
                 </div>
                 {/* Sección de Lista de Servicios */}
                 <div className="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-                    
+
                     <form className="d-flex buscador" role="search">
                         <input
                             type="text"
@@ -627,14 +646,14 @@ const servicio = () => {
                                             <td>{servicio.extintor.codigo_empresa}</td>
                                             <td>{servicio.extintor.sucursal.nombre_sucursal}</td>
                                             <td>{servicio.extintor.marca}</td>
-                                        <td>{servicio.extintor.capacidad}</td>
+                                            <td>{servicio.extintor.capacidad}</td>
                                             <td>{servicio.extintor.ubicacion}</td>
                                             <td>
                                                 {servicio.servicio_trabajos.length > 0 ?
                                                     servicio.servicio_trabajos.map(servicioTrabajo => servicioTrabajo.trabajo.nombre_trabajo).join(', ')
                                                     : 'No se hizo trabajos'}
                                             </td>
-                                            <td>{servicio.observaciones}</td>                                       
+                                            <td>{servicio.observaciones}</td>
                                             <td className="accion">
                                                 <select className='form-select' onChange={(e) => handleActionChange(e, servicio)} id={`select-${servicio.id}`}>
                                                     <option value="">Seleccionar</option>

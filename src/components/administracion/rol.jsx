@@ -14,6 +14,7 @@ const Rol = () => {
     const [editingRol, setEditingRol] = useState(null); // Estado para el rol en edición
     const [editNombreRol, setEditNombreRol] = useState('');
     const [editSelectedMenu, setEditSelectedMenu] = useState([]);
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         handleGetUsers();
@@ -50,6 +51,11 @@ const Rol = () => {
                     nombre_rol,
                     menus: selectedOptionIds,
                     estado: 1
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
             );
 
@@ -69,18 +75,36 @@ const Rol = () => {
     };
 
     const handleGetUsers = async () => {
-        const res = await axios.get("https://backendgeyse.onrender.com/api/rol");
+        const res = await axios.get("https://backendgeyse.onrender.com/api/rol", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         setRol(res.data.data.rol);
     };
 
     const handleGetMenus = async () => {
-        const res = await axios.get("https://backendgeyse.onrender.com/api/menu");
+        const res = await axios.get("https://backendgeyse.onrender.com/api/menu", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         setMenus(res.data.data.menu);
     };
 
     const handleDarBaja = async (cargo) => {
         try {
-            await axios.put(`https://backendgeyse.onrender.com/api/rol/baja/${cargo.id}`, { estado: 0 });
+            await axios({
+                url: `https://backendgeyse.onrender.com/api/rol/baja/${cargo.id}`,
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                data: { estado: 0 }
+            }).then((response) => {
+                // Accede a la respuesta de la API
+                console.log("Respuesta de la API:", response.data);
+            });
             handleGetUsers();
             swal({
                 title: `Cargo ${cargo.nombre_rol} dado de baja`,
@@ -94,7 +118,17 @@ const Rol = () => {
 
     const handleDarReintegrar = async (cargo) => {
         try {
-            await axios.put(`https://backendgeyse.onrender.com/api/rol/baja/${cargo.id}`, { estado: 1 });
+            await axios({
+                url: `https://backendgeyse.onrender.com/api/rol/baja/${cargo.id}`,
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                data: { estado: 1 }
+            }).then((response) => {
+                // Accede a la respuesta de la API
+                console.log("Respuesta de la API:", response.data);
+            });
             handleGetUsers();
             swal({
                 title: `Cargo ${cargo.nombre_rol} reintegrado`,
@@ -105,7 +139,29 @@ const Rol = () => {
             console.error(error);
         }
     };
-
+    const handleDarEliminar = async (cargo) => {
+        try {
+            await axios({
+                url: `https://backendgeyse.onrender.com/api/rol/baja/${cargo.id}`,
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                data: { estado: 3 }
+            }).then((response) => {
+                // Accede a la respuesta de la API
+                console.log("Respuesta de la API:", response.data);
+            });
+            handleGetUsers();
+            swal({
+                title: `Cargo ${cargo.nombre_rol} Eliminado`,
+                icon: "success",
+                button: "Ok",
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
     const handleChangeBuscador = (e) => {
         setSearchTerm(e.target.value);
     };
@@ -142,10 +198,20 @@ const Rol = () => {
         }
 
         try {
-            await axios.put(`https://backendgeyse.onrender.com/api/rol/${editingRol.id}`, {
-                nombre_rol: editNombreRol,
-                menus: selectedOptionIds,
-                estado: editingRol.estado
+            await axios({
+                url: `https://backendgeyse.onrender.com/api/rol/${editingRol.id}`,
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                data: {
+                    nombre_rol: editNombreRol,
+                    menus: selectedOptionIds,
+                    estado: editingRol.estado
+                }
+            }).then((response) => {
+                // Accede a la respuesta de la API
+                console.log("Respuesta de la API:", response.data);
             });
 
             setEditingRol(null);
@@ -212,7 +278,7 @@ const Rol = () => {
                 </div>
 
                 <div className="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-                    
+
                     <form className="d-flex buscador" role="search">
                         <input
                             type="text"
@@ -256,7 +322,7 @@ const Rol = () => {
                 </div>
 
                 <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
-                    
+
                     <div className="table table-responsive tablaRol">
                         <table className="table table-sm">
                             <thead className="table-dark">
@@ -279,8 +345,9 @@ const Rol = () => {
                                                 : 'No tiene menús'}
                                         </td>
                                         <td>{rol.estado == 1 ? 'activo' : 'no activo'}</td>
-                                        <td>
-                                            <button className='btn btn-danger boton2' onClick={() => handleDarReintegrar(rol)}>Reintegrar</button>
+                                        <td className='accion'>
+                                            <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(rol)}>Reintegrar</button>
+                                            <button className='btn btn-danger boton2' onClick={() => handleDarEliminar(rol)}>Eliminar</button>
                                         </td>
                                     </tr>
                                 ))}

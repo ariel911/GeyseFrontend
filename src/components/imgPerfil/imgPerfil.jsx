@@ -15,7 +15,7 @@ const ImgPerfil = () => {
     localStorage.removeItem("nombre");
     localStorage.removeItem("id");
     localStorage.removeItem("Rol");
-    navigate("/")
+    navigate("/login")
   }
 
   return (

@@ -22,14 +22,9 @@ const inspeccion = () => {
     const [selectedOption, setSelectedOption] = useState('');
     const [editSelectedEstado, setEditSelectedEstado] = useState([]);
 
-    const customStyles = {
-        menu: (provided) => ({
-            ...provided,
-            zIndex: 9999, // Asegura que el menú esté encima de otros elementos
-        }),
-    };
-
     const usuario_Id = localStorage.getItem('id');
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
         handleGetinspecciones();
         handleGetextintors();
@@ -72,7 +67,9 @@ const inspeccion = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/inspeccion",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setinspecciones(res.data.data.inspecion);
     };
@@ -80,7 +77,9 @@ const inspeccion = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/extintor",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setextintor(res.data.data.extintor);
     };
@@ -88,7 +87,9 @@ const inspeccion = () => {
         const res = await axios({
             url: "https://backendgeyse.onrender.com/api/estado",
             method: "GET",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         setestados(res.data.data.estado);
     };
@@ -126,7 +127,9 @@ const inspeccion = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/inspeccion/baja/${id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 1,
 
@@ -140,7 +143,7 @@ const inspeccion = () => {
             title: `Inspección Reintegrado`,
             icon: "success",
             button: "Ok",
-          });
+        });
     }
     const handleDarBaja = async (id) => {
 
@@ -148,7 +151,9 @@ const inspeccion = () => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/inspeccion/baja/${id}`,
             method: "PUT",
-
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             data: {
                 estado: 0,
 
@@ -162,7 +167,7 @@ const inspeccion = () => {
             title: `Inspección dado de baja`,
             icon: "success",
             button: "Ok",
-          });
+        });
     }
     const handleUpdateUser = async (e) => {
 
@@ -173,6 +178,9 @@ const inspeccion = () => {
             await axios({
                 url: `https://backendgeyse.onrender.com/api/inspeccion/${selectedUser.id}`,
                 method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 data: {
                     fecha_inspeccion: document.getElementById('fecha_inspeccion2').value,
                     observaciones: document.getElementById('observacion2').value,
@@ -219,6 +227,11 @@ const inspeccion = () => {
                     extintorId: selectedOption.value,
                     estados: selectedEstados
                 },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
 
             // Limpiar los campos del formulario
@@ -409,7 +422,7 @@ const inspeccion = () => {
                                         isMulti
                                         className=""
                                         MenuList
-                                       
+
                                     />
                                 </div>
                                 <div className="mb-3 col">

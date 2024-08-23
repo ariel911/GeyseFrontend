@@ -33,6 +33,7 @@ function Login({ addToken, addUsuario }) {
         const res = await axios({
           url: "https://backendGeyse.onrender.com/auth/login",
           method: 'POST',
+
           data: datos
         });
 

@@ -16,7 +16,8 @@ const Entrada = () => {
 
   const [sucursales, setSucursales] = useState([]);
   const [inspeccions, setinspeccions] = useState([]);
-
+  const token = localStorage.getItem('token');
+  
   useEffect(() => {
     handleGetClientes();
     handleGetServicios();
@@ -29,7 +30,9 @@ const Entrada = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/cliente",
       method: "GET",
-
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     setClientes(res.data.data.clientes);
   };
@@ -37,9 +40,9 @@ const Entrada = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/servicio",
       method: "GET",
-      /* headers: {
+      headers: {
       Authorization: `Bearer ${token}`,
-    },   */
+    },  
     });
     setServicios(res.data.data.servicio);
   };
@@ -48,6 +51,9 @@ const Entrada = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/sucursal",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     setSucursales(res.data.data.sucursal);
 
@@ -56,6 +62,9 @@ const Entrada = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/extintor",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     setextintores(res.data.data.extintor);
 
@@ -64,6 +73,9 @@ const Entrada = () => {
     const res = await axios({
       url: "https://backendgeyse.onrender.com/api/inspeccion",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
     setinspeccions(res.data.data.inspeccion);
 
