@@ -10,17 +10,17 @@ const ImgPerfil = () => {
   const handleClick = () => {
     setIsActive(!isActive);
   };
-  const handleLogOut = ({Component}) => {
+/*   const handleLogOut = ({Component}) => {
     localStorage.removeItem("token");
     localStorage.removeItem("nombre");
     localStorage.removeItem("id");
     localStorage.removeItem("Rol");
     navigate("/login")
-  }
+  } */
 
   return (
     <div className='elementoLink' >
-      <div  >
+      <div>
         <img src={imagenCircular} className='imagenCircular' onClick={handleClick} alt='hi'/>
 
       </div>

@@ -379,14 +379,14 @@ const sucursal = () => {
                             </thead>
                             <tbody>
                                 {filteredSucursales
-                                    ?.filter((sucursal) => sucursal.estado === 1 && sucursal.cliente.estado === 1) // Filtrar sucursales activas y clientes activos
+                                    ?.filter((sucursal) => sucursal?.estado === 1 && sucursal?.cliente?.estado === 1) // Filtrar sucursales activas y clientes activos
                                     .map((sucursal, index) => (
                                         <tr key={sucursal.id}>
                                             <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
-                                            <td>{sucursal.nombre_sucursal}</td>
-                                            <td>{sucursal.nombre_encargado}</td>
-                                            <td>{sucursal.ubicacion}</td>
-                                            <td>{sucursal.fecha_registro.slice(0, 10)}</td>
+                                            <td>{sucursal?.nombre_sucursal}</td>
+                                            <td>{sucursal?.nombre_encargado}</td>
+                                            <td>{sucursal?.ubicacion}</td>
+                                            <td>{sucursal?.fecha_registro?.slice(0, 10)}</td>
                                             <td className="accion">
                                                 <button className='btn btn-primary boton' data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(sucursal)}>Editar</button>
                                                 <button className='btn btn-danger boton' onClick={() => handleDarBaja(sucursal)}>Baja</button>
@@ -418,10 +418,10 @@ const sucursal = () => {
                                     .map((sucursal, index) => (
                                         <tr key={sucursal.id}>
                                             <td>{index + 1}</td> {/* Numeración consecutiva basada en la lista filtrada */}
-                                            <td>{sucursal.nombre_sucursal}</td>
-                                            <td>{sucursal.nombre_encargado}</td>
-                                            <td>{sucursal.fecha_registro.slice(0, 10)}</td>
-                                            <td>{sucursal.ubicacion}</td>
+                                            <td>{sucursal?.nombre_sucursal}</td>
+                                            <td>{sucursal?.nombre_encargado}</td>
+                                            <td>{sucursal?.fecha_registro?.slice(0, 10)}</td>
+                                            <td>{sucursal?.ubicacion}</td>
                                             <td className="accion">
                                                 <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(sucursal)}>Reintegrar</button>
                                                 <button className='btn btn-danger boton2' onClick={() => handleDarEliminar(sucursal)}>Eliminar</button>

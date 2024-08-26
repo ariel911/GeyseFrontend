@@ -492,9 +492,7 @@ const inspeccion = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredInspecciones
-                                    ?.filter((inspeccion) => inspeccion.estado === 1 && inspeccion.extintor.estado === 1) // Filtrar inspecciones con estado igual a 1 y extintores activos
-                                    .map((inspeccion, index) => (
+                                {filteredInspecciones?.filter((inspeccion) => inspeccion.estado === 1 && inspeccion.extintor.estado === 1 && inspeccion.extintor.sucursal.estado === 1 && inspeccion.extintor.sucursal.cliente.estado === 1).map((inspeccion, index) => (
                                         <tr key={inspeccion.id}>
                                             <td>{index + 1}</td> {/* Número consecutivo basado en la lista filtrada */}
                                             <td>{inspeccion.extintor.codigo_empresa}</td>
@@ -666,8 +664,7 @@ const inspeccion = () => {
                             </thead>
                             <tbody>
                                 {inspecciones
-                                    ?.filter((inspeccion) => inspeccion.estado === 0 && inspeccion.extintor.estado === 1) // Filtrar inspecciones con estado igual a 0 y extintor activo
-                                    .map((inspeccion, index) => (
+                                    ?.filter((inspeccion) => inspeccion.estado === 0 && inspeccion.extintor.estado === 1 && inspeccion.extintor.sucursal.estado === 1 && inspeccion.extintor.sucursal.cliente.estado === 1).map((inspeccion, index) => (
                                         <tr key={inspeccion.id}>
                                             <td>{index + 1}</td> {/* Numeración consecutiva basada en la lista filtrada */}
                                             <td>{inspeccion.extintor.codigo_empresa}</td>
@@ -676,11 +673,7 @@ const inspeccion = () => {
                                             <td>{inspeccion.fecha_inspeccion.slice(0, 10)}</td>
                                             <td>{inspeccion.extintor.ubicacion}</td>
                                             <td>{inspeccion.observaciones}</td>
-                                            <td>
-                                                {inspeccion.inspeccion_estados.length > 0
-                                                    ? inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', ')
-                                                    : 'No se hizo trabajos'}
-                                            </td>
+                                            <td>{inspeccion.inspeccion_estados.length > 0? inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', '): 'No se hizo trabajos'}</td>
                                             <td className="accion">
                                                 <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(inspeccion.id)}>Reintegrar</button>
                                                 <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(inspeccion.id)}>Eliminar</button>

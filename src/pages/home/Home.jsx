@@ -14,8 +14,6 @@ const Home = ({ componente }) => {
   const rol = localStorage.getItem('Rol');
 
 
-
-
   return (
 
     <>
@@ -34,10 +32,10 @@ const Home = ({ componente }) => {
             <img src={logo} className='logoGeyse' />
           </div>
         </Link>
-        <label htmlFor="nav_check" className='barraMenu' >
+        <p htmlFor="nav_check" className='barraMenu' >
 
           <FontAwesomeIcon className='faBars ' icon={faBars} style={{ "--fa-primary-color": "#ffffff", "--fa-secondary-color": "#b0b0b0", }} />
-        </label>
+        </p>
 
       </div>
       <div className='centro'>

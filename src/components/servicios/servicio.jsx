@@ -664,7 +664,7 @@ const servicio = () => {
                                 </thead>
                                 <tbody>
                                     {filteredServicios
-                                        ?.filter((servicio) => servicio.estado === 1 && servicio.extintor.estado === 1)
+                                        ?.filter((servicio) => servicio.estado === 1 && servicio.extintor.estado === 1 && servicio.extintor.sucursal.estado === 1 && servicio.extintor.sucursal.cliente.estado === 1)
                                         .map((servicio, index) => (
                                             <tr key={servicio.id}>
                                                 <td>{index + 1}</td>
@@ -717,7 +717,7 @@ const servicio = () => {
                             </thead>
                             <tbody>
                                 {servicios
-                                    ?.filter((servicio) => servicio.estado === 0 && servicio.extintor.estado === 1) // Filtrar servicios con estado igual a 0 (bajas)
+                                    ?.filter((servicio) => servicio.estado === 0 && servicio.extintor.estado === 1 && servicio.extintor.sucursal.estado === 1 && servicio.extintor.sucursal.cliente.estado === 1) // Filtrar servicios con estado igual a 0 (bajas)
                                     .map((servicio, index) => (
                                         <tr key={servicio.id}>
                                             <td>{index + 1}</td> {/* Orden consecutivo basado en la lista filtrada */}

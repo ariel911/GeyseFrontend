@@ -455,7 +455,7 @@ const QrScannerComponent = () => {
                                 <h5 className="card-title mt-4">Inspecciones</h5>
 
                                 {inspecciones
-                                    .filter(inspeccion => inspeccion.estado === 1 && inspeccion.sucursal.estado === 1) // Filtrar inspecciones con estado igual a 0
+                                    .filter(inspeccion => inspeccion.estado === 1 && inspeccion.extintor.sucursal.estado === 1 && inspeccion.extintor.sucursal.cliente.estado == 1 ) // Filtrar inspecciones con estado igual a 0
                                     .map(inspeccion => (
                                         <div key={inspeccion.id} className="card mb-3">
                                             <div className="card-body">
@@ -480,7 +480,7 @@ const QrScannerComponent = () => {
                                 <h5 className="card-title mt-4">Servicios</h5>
 
                                 {servicios
-                                    .filter(servicio => servicio.estado === 1 && servicio.sucursal.estado === 1) // Filtrar servicios con estado igual a 0
+                                    .filter(servicio => servicio.estado === 1 && servicio.extintor.sucursal.estado === 1 && servicio.extintor.sucursal.cliente.estado == 1) // Filtrar servicios con estado igual a 0
                                     .map(servicio => (
                                         <div key={servicio.id} className="card mb-3">
                                             <div className="card-body">
@@ -512,7 +512,7 @@ const QrScannerComponent = () => {
                                     onChange={(e) => setSearchSucursal(e.target.value)}
                                 />
                                 {filteredExtintoresSucursal
-                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado === 1) // Filtrar extintores con estado igual a 0
+                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado === 1 && ext.sucursal.cliente.estado == 1) // Filtrar extintores con estado igual a 0
                                     .map((ext, index) => (
                                         <div key={index}>
                                             <p className="card-text"><strong>Código del Extintor:</strong> {ext.codigo_extintor}</p>
@@ -552,7 +552,7 @@ const QrScannerComponent = () => {
                                 />
                                 <hr />
                                 {filteredExtintoresCliente
-                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado=== 1) // Filtrar extintores con estado igual a 0
+                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado=== 1 && ext.sucursal.cliente.estado == 1 ) // Filtrar extintores con estado igual a 0
                                     .map((ext, index) => (
                                         <div key={index}>
                                             <p className="card-text"><strong>Código del Extintor:</strong> {ext.codigo_extintor}</p>

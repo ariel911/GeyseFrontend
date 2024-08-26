@@ -24,6 +24,8 @@ const extintor = () => {
     const [capacidad, setcapacidad] = useState('');
     const [sucursales, setsucursales] = useState(null);
     const [tipo, setTipo] = useState(null);
+
+    
     const [ubicacion, setubicacion] = useState('');
     const [observaciones, setobservaciones] = useState('');
     const [fecha_registro, setfecha_registro] = useState('');

@@ -288,12 +288,15 @@ const Usuario = () => {
     console.log("claven:", nuevaClave)
     console.log("usuario:", selectedUser.id)
     try {
-      await axios.put(`https://backendgeyse.onrender.com/api/usuarios/cambiar-contrasena/${selectedUser.id}`, {
+      await axios({
+        url: `https://backendgeyse.onrender.com/api/usuarios/cambiar-contrasena/${selectedUser.id}`,
+        method:"PUT",
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }, {
-        clave: nuevaClave,
+        data: {
+          clave: nuevaClave,
+        }
       });
 
       setNuevaClave('');
@@ -478,6 +481,7 @@ const Usuario = () => {
                     <th scope="col">Correo</th>
                     <th scope="col">Registro</th>
                     <th scope="col">Cargo</th>
+                    <th scope="col">Accesos</th>
                     <th scope="col">Acción</th>
                   </tr>
                 </thead>
@@ -492,6 +496,7 @@ const Usuario = () => {
                         <td>{usuario.correo}</td>
                         <td>{usuario.fecha_registro.slice(0, 10)}</td>
                         <td>{usuario?.rol?.nombre_rol}</td>
+                        <td>{usuario.rol? usuario.rol.menu_rols.map(menus=> menus.menu.nombre_menu).join(', '): 'No tiene accesos'}</td>
                         <td className="accion">
                           <button className="btn btn-primary boton" data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(usuario)}>Editar</button>
                           <button className="btn btn-danger boton" onClick={() => handleDarBaja(usuario)}>Baja</button>
@@ -527,6 +532,8 @@ const Usuario = () => {
                     <th scope="col">Correo</th>
                     <th scope="col">Registro</th>
                     <th scope="col">Cargo</th>
+                    <th scope="col">Accesos</th>
+
                     <th scope="col">Acción</th>
                   </tr>
                 </thead>
@@ -541,6 +548,7 @@ const Usuario = () => {
                         <td>{usuario.correo}</td>
                         <td>{usuario.fecha_registro.slice(0, 10)}</td>
                         <td>{usuario?.rol?.nombre_rol}</td>
+                        <td>{usuario.rol? usuario.rol.menu_rols.map(menus=> menus.menu.nombre_menu).join(', '): 'No tiene accesos'}</td>
                         <td className="accion">
                           <button className="btn btn-success boton2" onClick={() => handleDarReintegrar(usuario)}>Reintegrar</button>
                           <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(usuario)}>Eliminar</button>
