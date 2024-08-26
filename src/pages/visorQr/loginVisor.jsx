@@ -20,7 +20,7 @@ const Login = () => {
         const clienteData = await clienteResponse.json();
 
         const cliente = clienteData.data.clientes.find(c => c.usuario_acceso === usuarioAcceso && c.clave === clave);
-        if (cliente) {
+        if (cliente.estado === 1) {
           setIsAuthenticated(true);
           console.log("cliente:", cliente)
           localStorage.setItem("idCliente", cliente.id);

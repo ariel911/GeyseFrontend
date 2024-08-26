@@ -122,7 +122,28 @@ const inspeccion = () => {
         }
 
     };
+    const handleDarEliminar = async (id) => {
+        await axios({
+            url: `https://backendgeyse.onrender.com/api/inspeccion/baja/${id}`,
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            data: {
+                estado: 3,
 
+            },
+        }).then((response) => {
+            // Accede a la respuesta de la API
+            console.log("Respuesta de la API:", response.data);
+        });
+        handleGetinspecciones();
+        swal({
+            title: `Inspección Eliminada`,
+            icon: "success",
+            button: "Ok",
+        });
+    }
     const handleDarReintegrar = async (id) => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/inspeccion/baja/${id}`,
@@ -263,15 +284,17 @@ const inspeccion = () => {
 
     //react select y su buscador
 
-    const options = extintor.map((ex) => ({
-        value: ex.id,
-        label: ex.codigo_empresa,
-        nombre: ex.marca,
-        capacidad: ex.capacidad,
-        sucursal: ex.sucursal.nombre_sucursal,
-        cliente: ex.sucursal.cliente.nombre_cliente,
+    const options = extintor
+        .filter((ex) => ex.estado === 1) // Filtrar solo extintores con estado igual a 1 (activos)
+        .map((ex) => ({
+            value: ex.id,
+            label: ex.codigo_empresa,
+            nombre: ex.marca,
+            capacidad: ex.capacidad,
+            sucursal: ex.sucursal.nombre_sucursal,
+            cliente: ex.sucursal.cliente.nombre_cliente,
+        }));
 
-    }));
     const handleSelectChange = (selectedOption) => {
         setSelectedOption(selectedOption)
     };
@@ -341,10 +364,13 @@ const inspeccion = () => {
     const handleSelectChangeExtintor = (extintor) => {
         setselectedExtintor(extintor);
     };
-    const optionsExtintor = extintor?.map((extintor) => ({
-        value: extintor.id,
-        label: extintor.codigo_empresa
-    }));
+    const optionsExtintor = extintor
+        ?.filter((extintor) => extintor.estado === 1) // Filtrar extintores con estado igual a 1
+        .map((extintor) => ({
+            value: extintor.id,
+            label: extintor.codigo_empresa
+        }));
+
     const handleEditChange = (selectedOption) => {
         setEditSelectedEstado(selectedOption);
     };
@@ -442,7 +468,6 @@ const inspeccion = () => {
 
                 {/* Pestaña Lista de Inspecciones */}
                 <div className="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-
                     <form className="d-flex buscador" role="search">
                         <input
                             type="text"
@@ -467,28 +492,29 @@ const inspeccion = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredInspecciones?.map((inspeccion, index) => inspeccion.estado == 1 && (
-                                    <tr key={inspeccion.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{inspeccion.extintor.codigo_empresa}</td>
-                                        <td>{inspeccion.extintor.ubicacion}</td>
-                                        <td>{inspeccion.extintor.marca}</td>
-                                        <td>{inspeccion.extintor.capacidad}</td>
-                                        <td>{inspeccion.observaciones}</td>
-                                        <td className="accion">
-                                            <select className='form-select' onChange={(e) => handleActionChange(e, inspeccion)} id={`select-${inspeccion.id}`}>
-                                                <option value="">Seleccionar</option>
-                                                <option value="edit">Editar</option>
-                                                <option value="baja">Baja</option>
-                                                <option value="detalle">Detalle</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filteredInspecciones
+                                    ?.filter((inspeccion) => inspeccion.estado === 1 && inspeccion.extintor.estado === 1) // Filtrar inspecciones con estado igual a 1 y extintores activos
+                                    .map((inspeccion, index) => (
+                                        <tr key={inspeccion.id}>
+                                            <td>{index + 1}</td> {/* Número consecutivo basado en la lista filtrada */}
+                                            <td>{inspeccion.extintor.codigo_empresa}</td>
+                                            <td>{inspeccion.extintor.ubicacion}</td>
+                                            <td>{inspeccion.extintor.marca}</td>
+                                            <td>{inspeccion.extintor.capacidad}</td>
+                                            <td>{inspeccion.observaciones}</td>
+                                            <td className="accion">
+                                                <select className='form-select' onChange={(e) => handleActionChange(e, inspeccion)} id={`select-${inspeccion.id}`}>
+                                                    <option value="">Seleccionar</option>
+                                                    <option value="edit">Editar</option>
+                                                    <option value="baja">Baja</option>
+                                                    <option value="detalle">Detalle</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
-
                 </div>
 
                 {/* Detalles */}
@@ -628,39 +654,44 @@ const inspeccion = () => {
                             <thead className="table-dark">
                                 <tr>
                                     <th scope="col">Nº</th>
+                                    <th scope="col">Cod. Empresa</th>
                                     <th scope="col">Marca</th>
                                     <th scope="col">Capacidad</th>
                                     <th scope="col">Fecha Inspección</th>
                                     <th scope="col">Ubicación</th>
-                                    <th scope="col ">Observaciones</th>
-                                    <th scope="col ">Desperfectos</th>
-                                    <th scope="col ">Acción</th>
+                                    <th scope="col">Observaciones</th>
+                                    <th scope="col">Desperfectos</th>
+                                    <th scope="col">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {inspecciones?.map((inspeccion, index) => inspeccion.estado == 0 && (
-                                    <tr key={inspeccion.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{inspeccion.extintor.marca}</td>
-                                        <td>{inspeccion.extintor.capacidad}</td>
-                                        <td>{inspeccion.fecha_inspeccion.slice(0, 10)}</td>
-                                        <td>{inspeccion.extintor.ubicacion}</td>
-                                        <td>{inspeccion.observaciones}</td>
-                                        <td>
-                                            {inspeccion.inspeccion_estados.length > 0 ?
-                                                inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', ')
-                                                : 'No se hizo trabajos'}
-                                        </td>
-                                        <td>
-                                            <button className='btn btn-danger boton2' onClick={() => handleDarReintegrar(inspeccion.id)}>Reintegrar</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {inspecciones
+                                    ?.filter((inspeccion) => inspeccion.estado === 0 && inspeccion.extintor.estado === 1) // Filtrar inspecciones con estado igual a 0 y extintor activo
+                                    .map((inspeccion, index) => (
+                                        <tr key={inspeccion.id}>
+                                            <td>{index + 1}</td> {/* Numeración consecutiva basada en la lista filtrada */}
+                                            <td>{inspeccion.extintor.codigo_empresa}</td>
+                                            <td>{inspeccion.extintor.marca}</td>
+                                            <td>{inspeccion.extintor.capacidad}</td>
+                                            <td>{inspeccion.fecha_inspeccion.slice(0, 10)}</td>
+                                            <td>{inspeccion.extintor.ubicacion}</td>
+                                            <td>{inspeccion.observaciones}</td>
+                                            <td>
+                                                {inspeccion.inspeccion_estados.length > 0
+                                                    ? inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', ')
+                                                    : 'No se hizo trabajos'}
+                                            </td>
+                                            <td className="accion">
+                                                <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(inspeccion.id)}>Reintegrar</button>
+                                                <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(inspeccion.id)}>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
-
                     </div>
                 </div>
+
 
             </div>
         </div >

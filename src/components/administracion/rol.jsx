@@ -300,22 +300,24 @@ const Rol = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredCargos?.map((rol, index) => rol.estado == 1 && (
-                                    <tr key={rol.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{rol.nombre_rol}</td>
-                                        <td>
-                                            {rol.menu_rols.length > 0 ?
-                                                rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
-                                                : 'No tiene menús'}
-                                        </td>
-                                        <td>{rol.estado == 1 ? 'activo' : 'no activo'}</td>
-                                        <td className='accion'>
-                                            <button className='btn btn-danger boton' onClick={() => handleDarBaja(rol)}>Baja</button>
-                                            <button className='btn btn-primary boton' onClick={() => handleEditClick(rol)} data-bs-toggle="modal" data-bs-target="#modalEdit">Editar</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filteredCargos
+                                    ?.filter(rol => rol.estado == 1) // Filtrar cargos con estado 1
+                                    .map((rol, index) => (
+                                        <tr key={rol.id}>
+                                            <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                                            <td>{rol.nombre_rol}</td>
+                                            <td>
+                                                {rol.menu_rols.length > 0 ?
+                                                    rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
+                                                    : 'No tiene menús'}
+                                            </td>
+                                            <td>{rol.estado == 1 ? 'activo' : 'no activo'}</td>
+                                            <td className='accion'>
+                                                <button className='btn btn-danger boton' onClick={() => handleDarBaja(rol)}>Baja</button>
+                                                <button className='btn btn-primary boton' onClick={() => handleEditClick(rol)} data-bs-toggle="modal" data-bs-target="#modalEdit">Editar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
@@ -335,26 +337,29 @@ const Rol = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {rol?.map((rol, index) => rol.estado == 0 && (
-                                    <tr key={rol.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{rol.nombre_rol}</td>
-                                        <td>
-                                            {rol.menu_rols.length > 0 ?
-                                                rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
-                                                : 'No tiene menús'}
-                                        </td>
-                                        <td>{rol.estado == 1 ? 'activo' : 'no activo'}</td>
-                                        <td className='accion'>
-                                            <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(rol)}>Reintegrar</button>
-                                            <button className='btn btn-danger boton2' onClick={() => handleDarEliminar(rol)}>Eliminar</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {rol
+                                    ?.filter(rol => rol.estado == 0) // Filtrar roles con estado 0
+                                    .map((rol, index) => (
+                                        <tr key={rol.id}>
+                                            <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                                            <td>{rol.nombre_rol}</td>
+                                            <td>
+                                                {rol.menu_rols.length > 0 ?
+                                                    rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
+                                                    : 'No tiene menús'}
+                                            </td>
+                                            <td>{rol.estado == 1 ? 'activo' : 'no activo'}</td>
+                                            <td className='accion'>
+                                                <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(rol)}>Reintegrar</button>
+                                                <button className='btn btn-danger boton2' onClick={() => handleDarEliminar(rol)}>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
 
             {/* Modal de edición */}

@@ -48,7 +48,7 @@ const NavBar = ({ brand }) => {
         localStorage.removeItem("id");
         localStorage.removeItem("Rol");
         localStorage.removeItem("user"); // Asegúrate de eliminar toda la información del usuario
-        navigate("/pagina");
+        navigate("/login");
     };
 
     return (

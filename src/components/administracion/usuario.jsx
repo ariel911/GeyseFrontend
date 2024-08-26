@@ -482,34 +482,37 @@ const Usuario = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsuarios?.map((usuario, index) => (usuario.estado == 1 && usuario.rol.estado == 1) && (
-                    <tr key={usuario.id}>
-                      <td>{index + 1}</td>
-                      <td>{usuario.nombre_usuario}</td>
-                      <td>{usuario.apellido}</td>
-                      <td>{usuario.correo}</td>
-                      <td>{usuario.fecha_registro.slice(0, 10)}</td>
-                      <td>{usuario?.rol?.nombre_rol}</td>
-                      <td className="accion">
-                        <button className="btn btn-primary boton" data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(usuario)}>Editar</button>
-                        <button className="btn btn-danger boton" onClick={() => handleDarBaja(usuario)}>Baja</button>
-                        <button
-                          type="button"
-                          className="btn btn-secondary boton2"
-                          data-bs-toggle="modal"
-                          data-bs-target="#changePasswordModal"
-                          onClick={() => handleEditUser(usuario)}
-                        >
-                          Cambiar Clave
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {filteredUsuarios
+                    ?.filter(usuario => usuario.estado === 1 && usuario.rol.estado === 1) // Filtrar usuarios activos con rol activo
+                    .map((usuario, index) => (
+                      <tr key={usuario.id}>
+                        <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                        <td>{usuario.nombre_usuario}</td>
+                        <td>{usuario.apellido}</td>
+                        <td>{usuario.correo}</td>
+                        <td>{usuario.fecha_registro.slice(0, 10)}</td>
+                        <td>{usuario?.rol?.nombre_rol}</td>
+                        <td className="accion">
+                          <button className="btn btn-primary boton" data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(usuario)}>Editar</button>
+                          <button className="btn btn-danger boton" onClick={() => handleDarBaja(usuario)}>Baja</button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary boton2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#changePasswordModal"
+                            onClick={() => handleEditUser(usuario)}
+                          >
+                            Cambiar Clave
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+
 
         {/* Pestaña Bajas */}
         <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
@@ -528,25 +531,28 @@ const Usuario = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsuarios?.map((usuario, index) => usuario.estado == 0 && (
-                    <tr key={usuario.id}>
-                      <td>{index + 1}</td>
-                      <td>{usuario.nombre_usuario}</td>
-                      <td>{usuario.apellido}</td>
-                      <td>{usuario.correo}</td>
-                      <td>{usuario.fecha_registro.slice(0, 10)}</td>
-                      <td>{usuario?.rol?.nombre_rol}</td>
-                      <td className="accion">
-                        <button className="btn btn-success boton2" onClick={() => handleDarReintegrar(usuario)}>Reintegrar</button>
-                        <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(usuario)}>Eliminar</button>
-                      </td>
-                    </tr>
-                  ))}
+                  {filteredUsuarios
+                    ?.filter(usuario => usuario.estado === 0) // Filtrar usuarios con estado 0
+                    .map((usuario, index) => (
+                      <tr key={usuario.id}>
+                        <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                        <td>{usuario.nombre_usuario}</td>
+                        <td>{usuario.apellido}</td>
+                        <td>{usuario.correo}</td>
+                        <td>{usuario.fecha_registro.slice(0, 10)}</td>
+                        <td>{usuario?.rol?.nombre_rol}</td>
+                        <td className="accion">
+                          <button className="btn btn-success boton2" onClick={() => handleDarReintegrar(usuario)}>Reintegrar</button>
+                          <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(usuario)}>Eliminar</button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+
       </div>
     </div >
 

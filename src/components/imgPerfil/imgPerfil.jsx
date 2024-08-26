@@ -24,14 +24,14 @@ const ImgPerfil = () => {
         <img src={imagenCircular} className='imagenCircular' onClick={handleClick} alt='hi'/>
 
       </div>
-      <ul className={isActive ? 'submenuPerfilMostrar' : 'submenuPerfil'} id="subMenu">
+{/*       <ul className={isActive ? 'submenuPerfilMostrar' : 'submenuPerfil'} id="subMenu">
         <li className='perfilLink' >
           <a href='/#'>Configuracion</a>
         </li>
         <li className='perfilLink'>
           <a type='button' className='buttonLogout' onClick={handleLogOut}>Cerrar</a>
         </li>
-      </ul>
+      </ul> */}
     </div>
   )
 }

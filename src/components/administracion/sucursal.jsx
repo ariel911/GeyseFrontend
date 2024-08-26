@@ -104,6 +104,29 @@ const sucursal = () => {
     };
 
 
+    const handleDarEliminar = async (sucursal) => {
+        await axios({
+            url: `https://backendgeyse.onrender.com/api/sucursal/baja/${sucursal.id}`,
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            data: {
+                estado: 3,
+
+            },
+        }).then((response) => {
+            // Accede a la respuesta de la API
+            console.log("Respuesta de la API:", response.data);
+        });
+        handleGetUsers();
+        swal({
+            title: `Sucursal ${sucursal.nombre_sucursal} Eliminado`,
+            icon: "success",
+            button: "Ok",
+        });
+
+    }
     const handleDarReintegrar = async (sucursal) => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/sucursal/baja/${sucursal.id}`,
@@ -333,7 +356,6 @@ const sucursal = () => {
                 </div>
 
                 <div className="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-
                     <form className="d-flex buscador" role="search">
                         <input
                             type="text"
@@ -350,32 +372,34 @@ const sucursal = () => {
                                     <th scope="col">Nº</th>
                                     <th scope="col">Sucursal</th>
                                     <th scope="col">Encargado</th>
-                                    <th scope="col ">Ubicación</th>
-                                    <th scope="col ">Registro</th>
+                                    <th scope="col">Ubicación</th>
+                                    <th scope="col">Registro</th>
                                     <th scope="col">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredSucursales?.map((sucursal, index) => sucursal.estado === 1 && (
-                                    <tr key={sucursal.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{sucursal.nombre_sucursal}</td>
-                                        <td>{sucursal.nombre_encargado}</td>
-                                        <td>{sucursal.ubicacion}</td>
-                                        <td>{sucursal.fecha_registro.slice(0, 10)}</td>
-                                        <td className="accion">
-                                            <button className='btn btn-primary boton' data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(sucursal)}>Editar</button>
-                                            <button className='btn btn-danger boton' onClick={() => handleDarBaja(sucursal)}>Baja</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filteredSucursales
+                                    ?.filter((sucursal) => sucursal.estado === 1 && sucursal.cliente.estado === 1) // Filtrar sucursales activas y clientes activos
+                                    .map((sucursal, index) => (
+                                        <tr key={sucursal.id}>
+                                            <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                                            <td>{sucursal.nombre_sucursal}</td>
+                                            <td>{sucursal.nombre_encargado}</td>
+                                            <td>{sucursal.ubicacion}</td>
+                                            <td>{sucursal.fecha_registro.slice(0, 10)}</td>
+                                            <td className="accion">
+                                                <button className='btn btn-primary boton' data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(sucursal)}>Editar</button>
+                                                <button className='btn btn-danger boton' onClick={() => handleDarBaja(sucursal)}>Baja</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
 
+                <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
                     <div className="table table-responsive tablaSucursal">
                         <table className="table">
                             <thead className="table-dark">
@@ -385,30 +409,30 @@ const sucursal = () => {
                                     <th scope="col">Encargado</th>
                                     <th scope="col">Fecha Registro</th>
                                     <th scope="col">Ubicación</th>
-
-                                    <th scope="col ">Acción</th>
+                                    <th scope="col">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {sucursals?.map((sucursal, index) => sucursal.estado === 0 && (
-                                    <tr key={sucursal.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{sucursal.nombre_sucursal}</td>
-                                        <td>{sucursal.nombre_encargado}</td>
-                                        <td>{sucursal.fecha_registro.slice(0, 10)}</td>
-                                        <td>{sucursal.ubicacion}</td>
-
-                                        <td>
-                                            <button className='btn btn-danger boton2' onClick={() => handleDarReintegrar(sucursal)}>Reintegrar</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {sucursals
+                                    ?.filter((sucursal) => sucursal.estado === 0 && sucursal.cliente.estado === 1) // Filtrar sucursales con estado igual a 0
+                                    .map((sucursal, index) => (
+                                        <tr key={sucursal.id}>
+                                            <td>{index + 1}</td> {/* Numeración consecutiva basada en la lista filtrada */}
+                                            <td>{sucursal.nombre_sucursal}</td>
+                                            <td>{sucursal.nombre_encargado}</td>
+                                            <td>{sucursal.fecha_registro.slice(0, 10)}</td>
+                                            <td>{sucursal.ubicacion}</td>
+                                            <td className="accion">
+                                                <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(sucursal)}>Reintegrar</button>
+                                                <button className='btn btn-danger boton2' onClick={() => handleDarEliminar(sucursal)}>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
-
                     </div>
-
                 </div>
+
 
                 {/* Modal Editar */}
                 <div className="modal fade" id="modalEdit" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

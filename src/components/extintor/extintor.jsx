@@ -158,7 +158,28 @@ const extintor = () => {
         }));
 
     };
+    const handleDarEliminar = async (extintor) => {
+        await axios({
+            url: `https://backendgeyse.onrender.com/api/extintor/baja/${extintor.id}`,
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            data: {
+                estado: 3,
 
+            },
+        }).then((response) => {
+            // Accede a la respuesta de la API
+            console.log("Respuesta de la API:", response.data);
+        });
+        handleGetExtintores();
+        swal({
+            title: `Extintor ${extintor.codigo_empresa} Eliminado`,
+            icon: "success",
+            button: "Ok",
+        });
+    }
     const handleDarReintegrar = async (extintor) => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/extintor/baja/${extintor.id}`,
@@ -315,10 +336,13 @@ const extintor = () => {
     const handleChangeSucursal2 = (selectedOption) => {
         setSelectedsucursal2(selectedOption);
     };
-    const sucursalOptions = sucursales?.map((sucursal) => ({
+    const sucursalOptions = sucursales
+    ?.filter(sucursal => sucursal.estado === 1) // Filtrar sucursales con estado igual a 1
+    .map(sucursal => ({
         value: sucursal.id,
         label: sucursal.nombre_sucursal
     }));
+
     const tipoOptions = tipo?.map((tipo) => ({
         value: tipo.id,
         label: tipo.nombre_tipo
@@ -488,7 +512,7 @@ const extintor = () => {
                     <form className="d-flex buscador" role="search">
                         <input
                             type="text"
-                            placeholder="Buscar extintor por codigo de empresa..."
+                            placeholder="Buscar extintor por código de empresa..."
                             value={searchTerm}
                             onChange={handleChangeBuscador}
                             className="form-control me-2"
@@ -505,35 +529,36 @@ const extintor = () => {
                                     <th scope="col">Ubicación</th>
                                     <th scope="col">Marca</th>
                                     <th scope="col">Capacidad</th>
-
                                     <th scope="col">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredExtintores?.map((extintor, index) => extintor.estado == 1 && (
-                                    <tr key={extintor.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{extintor.codigo_extintor}</td>
-                                        <td>{extintor.codigo_empresa}</td>
-                                        <td>{extintor.ubicacion}</td>
-                                        <td>{extintor.marca}</td>
-                                        <td>{extintor.capacidad}</td>
-                                        <td className="accion">
-                                            <select className='form-select' onChange={(e) => handleActionChange(e, extintor)} id={`select-${extintor?.id}`}>
-                                                <option value="">Seleccionar</option>
-                                                <option value="edit">Editar</option>
-                                                <option value="baja">Baja</option>
-                                                <option value="detalle">Detalle</option>
-                                                <option value="Generar Qr">Generar QR</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {filteredExtintores
+                                    ?.filter(extintor => extintor.estado === 1 && extintor.sucursal.estado === 1 && extintor.sucursal.cliente.estado===1) // Filtrar extintores con estado 1
+                                    .map((extintor, index) => (
+                                        <tr key={extintor.id}>
+                                            <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                                            <td>{extintor.codigo_extintor}</td>
+                                            <td>{extintor.codigo_empresa}</td>
+                                            <td>{extintor.ubicacion}</td>
+                                            <td>{extintor.marca}</td>
+                                            <td>{extintor.capacidad}</td>
+                                            <td className="accion">
+                                                <select className='form-select' onChange={(e) => handleActionChange(e, extintor)} id={`select-${extintor.id}`}>
+                                                    <option value="">Seleccionar</option>
+                                                    <option value="edit">Editar</option>
+                                                    <option value="baja">Baja</option>
+                                                    <option value="detalle">Detalle</option>
+                                                    <option value="Generar Qr">Generar QR</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
-
                 </div>
+
                 {/* Detalles */}
 
                 <div className="modal fade" id="modalDetalle" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -719,7 +744,6 @@ const extintor = () => {
                 <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
                     {/* Contenido de Bajas */}
 
-
                     <div className="table table-responsive tablaExtintor">
                         <table className="table table-sm">
                             <thead className="table-dark">
@@ -734,24 +758,27 @@ const extintor = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {extintores.map((extintor, index) => extintor.estado == 0 && (
-                                    <tr key={extintor.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{extintor.codigo_extintor}</td>
-                                        <td>{extintor.codigo_empresa}</td>
-                                        <td>{extintor.ubicacion}</td>
-                                        <td>{extintor.marca}</td>
-                                        <td>{extintor.capacidad}</td>
-                                        <td className="accion">
-                                            <button className='btn btn-primary boton2' onClick={() => handleDarReintegrar(extintor)}>Reintegrar</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {extintores
+                                    .filter(extintor => extintor.estado === 0 && extintor.sucursal.estado === 1 && extintor.sucursal.cliente.estado===1) // Filtrar extintores con estado 0
+                                    .map((extintor, index) => (
+                                        <tr key={extintor.id}>
+                                            <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                                            <td>{extintor.codigo_extintor}</td>
+                                            <td>{extintor.codigo_empresa}</td>
+                                            <td>{extintor.ubicacion}</td>
+                                            <td>{extintor.marca}</td>
+                                            <td>{extintor.capacidad}</td>
+                                            <td className="accion">
+                                                <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(extintor)}>Reintegrar</button>
+                                                <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(extintor)}>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
-
                 </div>
+
             </div>
         </div>
     );

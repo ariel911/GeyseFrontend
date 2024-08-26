@@ -94,7 +94,28 @@ const cliente = () => {
     }));
 
   };
+  const handleDarEliminar = async (cliente) => {
+    await axios({
+      url: `https://backendgeyse.onrender.com/api/cliente/baja/${cliente.id}`,
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        estado: 3,
 
+      },
+    }).then((response) => {
+      // Accede a la respuesta de la API
+      console.log("Respuesta de la API:", response.data);
+    });
+    handleGetUsers();
+    swal({
+      title: `Cliente ${cliente.nombre_cliente} Eliminado`,
+      icon: "success",
+      button: "Ok",
+    });
+  }
   const handleDarReintegrar = async (cliente) => {
     await axios({
       url: `https://backendgeyse.onrender.com/api/cliente/baja/${cliente.id}`,
@@ -290,7 +311,6 @@ const cliente = () => {
         </div>
 
         <div className="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-
           <form className="d-flex buscador" role="search">
             <input
               type="text"
@@ -314,27 +334,29 @@ const cliente = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredClientes?.map((cliente, index) => cliente.estado == 1 && (
-                    <tr key={cliente.id}>
-                      <td>{index + 1}</td>
-                      <td>{cliente?.codigo}</td>
-                      <td>{cliente.nombre_cliente}</td>
-                      <td>{cliente.nombre_encargado}</td>
-                      <td>{cliente.fecha_registro.slice(0, 10)}</td>
-                      <td className="accion">
-                        <button className='btn btn-primary boton' data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(cliente)}>Editar</button>
-                        <button className='btn btn-danger boton' onClick={() => handleDarBaja(cliente)}>Baja</button>
-                      </td>
-                    </tr>
-                  ))}
+                  {filteredClientes
+                    ?.filter(cliente => cliente.estado === 1) // Filtrar clientes activos
+                    .map((cliente, index) => (
+                      <tr key={cliente.id}>
+                        <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                        <td>{cliente?.codigo}</td>
+                        <td>{cliente.nombre_cliente}</td>
+                        <td>{cliente.nombre_encargado}</td>
+                        <td>{cliente.fecha_registro.slice(0, 10)}</td>
+                        <td className="accion">
+                          <button className='btn btn-primary boton' data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(cliente)}>Editar</button>
+                          <button className='btn btn-danger boton' onClick={() => handleDarBaja(cliente)}>Baja</button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
 
+        <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
           <div className="table table-responsive tablaCliente">
             <table className="table table-fixed">
               <thead className="table-dark">
@@ -348,22 +370,26 @@ const cliente = () => {
                 </tr>
               </thead>
               <tbody>
-                {clientes?.map((cliente, index) => cliente.estado == 0 && (
-                  <tr key={cliente.id}>
-                    <td>{index + 1}</td>
-                    <td>{cliente?.codigo}</td>
-                    <td>{cliente?.nombre_cliente}</td>
-                    <td>{cliente?.nombre_encargado}</td>
-                    <td>{cliente?.fecha_registro.slice(0, 10)}</td>
-                    <td>
-                      <button className='btn btn-danger boton2' onClick={() => handleDarReintegrar(cliente)}>Reintegrar</button>
-                    </td>
-                  </tr>
-                ))}
+                {clientes
+                  ?.filter(cliente => cliente.estado === 0) // Filtrar clientes inactivos
+                  .map((cliente, index) => (
+                    <tr key={cliente.id}>
+                      <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                      <td>{cliente?.codigo}</td>
+                      <td>{cliente?.nombre_cliente}</td>
+                      <td>{cliente?.nombre_encargado}</td>
+                      <td>{cliente?.fecha_registro.slice(0, 10)}</td>
+                      <td className="accion">
+                        <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(cliente)}>Reintegrar</button>
+                        <button className='btn btn-danger boton2' onClick={() => handleDarEliminar(cliente)}>Eliminar</button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
         </div>
+
       </div>
 
       {/* Modal de edición */}

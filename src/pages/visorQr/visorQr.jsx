@@ -179,7 +179,7 @@ const QrScannerComponent = () => {
                             method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                             headers: {
                                 'Authorization': `Bearer ${token}`,
-                            
+
                             }
                         })
                             .then(response => response.json())
@@ -207,7 +207,7 @@ const QrScannerComponent = () => {
                                         method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                                         headers: {
                                             'Authorization': `Bearer ${token}`,
-                                          
+
                                         }
                                     })
                                         .then(response => response.json())
@@ -222,7 +222,7 @@ const QrScannerComponent = () => {
                                         method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                                         headers: {
                                             'Authorization': `Bearer ${token}`,
-                                          
+
                                         }
                                     })
                                         .then(response => response.json())
@@ -454,8 +454,9 @@ const QrScannerComponent = () => {
                             <div className="tab-pane fade" id="inspecciones" role="tabpanel" aria-labelledby="inspecciones-tab">
                                 <h5 className="card-title mt-4">Inspecciones</h5>
 
-                                {inspecciones.length > 0 ? (
-                                    inspecciones.map(inspeccion => (
+                                {inspecciones
+                                    .filter(inspeccion => inspeccion.estado === 1 && inspeccion.sucursal.estado === 1) // Filtrar inspecciones con estado igual a 0
+                                    .map(inspeccion => (
                                         <div key={inspeccion.id} className="card mb-3">
                                             <div className="card-body">
                                                 <p className="card-text"><strong>Fecha de Inspección:</strong> {new Date(inspeccion?.fecha_inspeccion).toLocaleDateString()}</p>
@@ -464,18 +465,23 @@ const QrScannerComponent = () => {
                                                 </p>
                                                 <p className="card-text"><strong>Inspector:</strong> {inspeccion.usuario.nombre_usuario}</p>
                                                 <p className="card-text"><strong>Observaciones:</strong> {inspeccion.observaciones}</p>
-
                                             </div>
                                         </div>
                                     ))
-                                ) : (
+                                }
+
+                                {/* Mostrar mensaje si no hay inspecciones con estado igual a 0 */}
+                                {inspecciones.filter(inspeccion => inspeccion.estado === 0).length === 0 && (
                                     <p>No hay inspecciones para este extintor.</p>
                                 )}
                             </div>
+
                             <div className="tab-pane fade" id="servicios" role="tabpanel" aria-labelledby="servicios-tab">
                                 <h5 className="card-title mt-4">Servicios</h5>
-                                {servicios.length > 0 ? (
-                                    servicios.map(servicio => (
+
+                                {servicios
+                                    .filter(servicio => servicio.estado === 1 && servicio.sucursal.estado === 1) // Filtrar servicios con estado igual a 0
+                                    .map(servicio => (
                                         <div key={servicio.id} className="card mb-3">
                                             <div className="card-body">
                                                 <p className="card-text"><strong>Fecha de Servicio:</strong> {new Date(servicio.fecha_servicio).toLocaleDateString()}</p>
@@ -488,10 +494,14 @@ const QrScannerComponent = () => {
                                             </div>
                                         </div>
                                     ))
-                                ) : (
+                                }
+
+                                {/* Mostrar mensaje si no hay servicios con estado igual a 0 */}
+                                {servicios.filter(servicio => servicio.estado === 0).length === 0 && (
                                     <p>No hay servicios para este extintor.</p>
                                 )}
                             </div>
+
                             <div className="tab-pane fade" id="sucursal" role="tabpanel" aria-labelledby="sucursal-tab">
                                 <h5 className="card-title mt-4">Extintores de la Sucursal: {extintor?.sucursal?.nombre_sucursal}</h5>
                                 <input
@@ -501,31 +511,36 @@ const QrScannerComponent = () => {
                                     value={searchSucursal}
                                     onChange={(e) => setSearchSucursal(e.target.value)}
                                 />
-                                {filteredExtintoresSucursal.length > 0 ? (
-                                    filteredExtintoresSucursal.map((ext, index) => (
+                                {filteredExtintoresSucursal
+                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado === 1) // Filtrar extintores con estado igual a 0
+                                    .map((ext, index) => (
                                         <div key={index}>
                                             <p className="card-text"><strong>Código del Extintor:</strong> {ext.codigo_extintor}</p>
                                             <p className="card-text"><strong>Ubicación:</strong> {ext.ubicacion}</p>
                                             <p className="card-text"><strong>Estado:</strong> {ext.estado === 1 ? 'Activo' : 'Inactivo'}</p>
                                             <Link to={`/pagina/extintoresQr`} className="btn btn-primary" onClick={(e) => {
                                                 // Prevenir la navegación predeterminada
-                                                setExtintor(ext)
+                                                setExtintor(ext);
                                                 Swal.fire({
                                                     title: 'Información',
                                                     text: 'Cargando detalles del extintor...',
                                                     icon: 'info',
                                                     timer: 1000,
                                                     showConfirmButton: false
-                                                })
+                                                });
                                                 handleScanButtonClick();
                                             }}>Ver más</Link>
                                             <hr />
                                         </div>
                                     ))
-                                ) : (
+                                }
+
+                                {/* Mostrar mensaje si no hay extintores con estado igual a 0 */}
+                                {filteredExtintoresSucursal.filter(ext => ext.estado === 0).length === 0 && (
                                     <p className="card-text">No hay extintores registrados en esta sucursal.</p>
                                 )}
                             </div>
+
                             <div className="tab-pane fade" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
                                 <h5 className="card-title mt-4">Extintores del Cliente: {extintor?.sucursal?.cliente?.nombre_cliente}</h5>
                                 <input
@@ -536,31 +551,25 @@ const QrScannerComponent = () => {
                                     onChange={(e) => setSearchCliente(e.target.value)}
                                 />
                                 <hr />
-                                {filteredExtintoresCliente.length > 0 ? (
-                                    filteredExtintoresCliente.map((ext, index) => (
+                                {filteredExtintoresCliente
+                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado=== 1) // Filtrar extintores con estado igual a 0
+                                    .map((ext, index) => (
                                         <div key={index}>
                                             <p className="card-text"><strong>Código del Extintor:</strong> {ext.codigo_extintor}</p>
                                             <p className="card-text"><strong>Ubicación:</strong> {ext.ubicacion}</p>
                                             <p className="card-text"><strong>Estado:</strong> {ext.estado === 1 ? 'Activo' : 'Inactivo'}</p>
-                                            {/* <Link to={`/pagina/extintoresQr`} className="btn btn-primary" onClick={(e) => {
-                                                // Prevenir la navegación predeterminada
-                                                setExtintor(ext);
-                                                Swal.fire({
-                                                    title: 'Información',
-                                                    text: 'Cargando detalles del extintor...',
-                                                    icon: 'info',
-                                                    timer: 1000,
-                                                    showConfirmButton: false
-                                                })
-                                                handleScanButtonClick();
-                                            }}>Ver más</Link> */}
+                                            {/* Aquí se puede agregar funcionalidad adicional si es necesario */}
                                             <hr />
                                         </div>
                                     ))
-                                ) : (
+                                }
+
+                                {/* Mostrar mensaje si no hay extintores con estado igual a 0 */}
+                                {filteredExtintoresCliente.filter(ext => ext.estado === 0).length === 0 && (
                                     <p className="card-text">No hay extintores registrados para este cliente.</p>
                                 )}
                             </div>
+
 
                             <div className="tab-pane fade" id="inspeccion" role="tabpanel" aria-labelledby="cliente-tab">
                                 <h5 className="card-title mt-4">Inspecciones</h5>

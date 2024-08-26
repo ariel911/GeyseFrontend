@@ -131,7 +131,28 @@ const servicio = () => {
             setselectedExtintor(null); // Si no hay cliente asociado, puedes manejar este caso como desees
         }
     };
+    const handleDarEliminar = async (id) => {
+        await axios({
+            url: `https://backendgeyse.onrender.com/api/servicio/baja/${id}`,
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            data: {
+                estado: 3,
 
+            },
+        }).then((response) => {
+            // Accede a la respuesta de la API
+            console.log("Respuesta de la API:", response.data);
+        });
+        handleGetservicios();
+        swal({
+            title: `Servicio Eliminado`,
+            icon: "success",
+            button: "Ok",
+        });
+    }
     const handleDarReintegrar = async (id) => {
         await axios({
             url: `https://backendgeyse.onrender.com/api/servicio/baja/${id}`,
@@ -149,7 +170,7 @@ const servicio = () => {
         });
         handleGetservicios();
         swal({
-            title: `Servicio dado de baja`,
+            title: `Servicio Reintegrado`,
             icon: "success",
             button: "Ok",
         });
@@ -173,7 +194,7 @@ const servicio = () => {
         });
         handleGetservicios();
         swal({
-            title: `Servicio Reintegrado`,
+            title: `Servicio dado de baja`,
             icon: "success",
             button: "Ok",
         });
@@ -277,15 +298,16 @@ const servicio = () => {
 
     //react select y su buscador
 
-    const options = extintor.map((ex) => ({
-        value: ex.id,
-        label: ex.codigo_empresa,
-        nombre: ex.marca,
-        capacidad: ex.capacidad,
-        sucursal: ex.sucursal.nombre_sucursal,
-        cliente: ex.sucursal.cliente.nombre_cliente,
-
-    }));
+    const options = extintor
+        .filter((ex) => ex.estado === 1) // Filtrar solo extintores con estado igual a 1
+        .map((ex) => ({
+            value: ex.id,
+            label: ex.codigo_empresa,
+            nombre: ex.marca,
+            capacidad: ex.capacidad,
+            sucursal: ex.sucursal.nombre_sucursal,
+            cliente: ex.sucursal.cliente.nombre_cliente,
+        }));
     const handleSelectChange = (selectedOption) => {
         setSelectedOption(selectedOption)
     };
@@ -300,10 +322,12 @@ const servicio = () => {
     const handleSelectChangeExtintor = (extintor) => {
         setselectedExtintor(extintor);
     };
-    const optionsExtintor = extintor?.map((extintor) => ({
-        value: extintor.id,
-        label: extintor.codigo_empresa
-    }));
+    const optionsExtintor = extintor
+        ?.filter((extintor) => extintor.estado === 1) // Filtrar solo extintores con estado igual a 1
+        .map((extintor) => ({
+            value: extintor.id,
+            label: extintor.codigo_empresa,
+        }));
 
     const estadoOptions = estados?.map((estado) => ({
         value: estado.id,
@@ -612,7 +636,6 @@ const servicio = () => {
                 </div>
                 {/* Sección de Lista de Servicios */}
                 <div className="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-
                     <form className="d-flex buscador" role="search">
                         <input
                             type="text"
@@ -633,42 +656,47 @@ const servicio = () => {
                                         <th scope="col">Sucursal</th>
                                         <th scope="col">Marca</th>
                                         <th scope="col">Capacidad</th>
-                                        <th scope="col ">Ubicación</th>
-                                        <th scope="col ">Trabajos</th>
-                                        <th scope="col ">Observaciones</th>
+                                        <th scope="col">Ubicación</th>
+                                        <th scope="col">Trabajos</th>
+                                        <th scope="col">Observaciones</th>
                                         <th scope="col">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredServicios?.map((servicio, index) => servicio.estado == 1 && (
-                                        <tr key={servicio.id}>
-                                            <td>{index + 1}</td>
-                                            <td>{servicio.extintor.codigo_empresa}</td>
-                                            <td>{servicio.extintor.sucursal.nombre_sucursal}</td>
-                                            <td>{servicio.extintor.marca}</td>
-                                            <td>{servicio.extintor.capacidad}</td>
-                                            <td>{servicio.extintor.ubicacion}</td>
-                                            <td>
-                                                {servicio.servicio_trabajos.length > 0 ?
-                                                    servicio.servicio_trabajos.map(servicioTrabajo => servicioTrabajo.trabajo.nombre_trabajo).join(', ')
-                                                    : 'No se hizo trabajos'}
-                                            </td>
-                                            <td>{servicio.observaciones}</td>
-                                            <td className="accion">
-                                                <select className='form-select' onChange={(e) => handleActionChange(e, servicio)} id={`select-${servicio.id}`}>
-                                                    <option value="">Seleccionar</option>
-                                                    <option value="edit">Editar</option>
-                                                    <option value="baja">Baja</option>
-                                                    <option value="detalle">Detalle</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {filteredServicios
+                                        ?.filter((servicio) => servicio.estado === 1 && servicio.extintor.estado === 1)
+                                        .map((servicio, index) => (
+                                            <tr key={servicio.id}>
+                                                <td>{index + 1}</td>
+                                                <td>{servicio.extintor.codigo_empresa}</td>
+                                                <td>{servicio.extintor.sucursal.nombre_sucursal}</td>
+                                                <td>{servicio.extintor.marca}</td>
+                                                <td>{servicio.extintor.capacidad}</td>
+                                                <td>{servicio.extintor.ubicacion}</td>
+                                                <td>
+                                                    {servicio.servicio_trabajos.length > 0
+                                                        ? servicio.servicio_trabajos
+                                                            .map((servicioTrabajo) => servicioTrabajo.trabajo.nombre_trabajo)
+                                                            .join(', ')
+                                                        : 'No se hizo trabajos'}
+                                                </td>
+                                                <td>{servicio.observaciones}</td>
+                                                <td className="accion">
+                                                    <select className='form-select' onChange={(e) => handleActionChange(e, servicio)} id={`select-${servicio.id}`}>
+                                                        <option value="">Seleccionar</option>
+                                                        <option value="edit">Editar</option>
+                                                        <option value="baja">Baja</option>
+                                                        <option value="detalle">Detalle</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
 
                 {/* Sección de Bajas */}
                 <div className="tab-pane fade" id="bajas" role="tabpanel" aria-labelledby="bajas-tab">
@@ -683,34 +711,38 @@ const servicio = () => {
                                     <th scope="col">Capacidad</th>
                                     <th scope="col">Fecha Servicio</th>
                                     <th scope="col">Ubicación</th>
-                                    <th scope="col ">Trabajos</th>
-                                    <th scope="col ">Acción</th>
+                                    <th scope="col">Trabajos</th>
+                                    <th scope="col">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {servicios?.map((servicio, index) => servicio.estado == 0 && (
-                                    <tr key={servicio.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{servicio.extintor.codigo_empresa}</td>
-                                        <td>{servicio.extintor.sucursal.nombre_sucursal}</td>
-                                        <td>{servicio.extintor.marca}</td>
-                                        <td>{servicio.extintor.capacidad}</td>
-                                        <td>{servicio.fecha_servicio.slice(0, 10)}</td>
-                                        <td>{servicio.extintor.ubicacion}</td>
-                                        <td>
-                                            {servicio.servicio_trabajos.length > 0 ?
-                                                servicio.servicio_trabajos.map(servicioTrabajo => servicioTrabajo.trabajo.nombre_trabajo).join(', ')
-                                                : 'No se hizo trabajos'}
-                                        </td>
-                                        <td>
-                                            <button className='btn btn-danger boton2' onClick={() => handleDarReintegrar(servicio.id)}>Reintegrar</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {servicios
+                                    ?.filter((servicio) => servicio.estado === 0 && servicio.extintor.estado === 1) // Filtrar servicios con estado igual a 0 (bajas)
+                                    .map((servicio, index) => (
+                                        <tr key={servicio.id}>
+                                            <td>{index + 1}</td> {/* Orden consecutivo basado en la lista filtrada */}
+                                            <td>{servicio.extintor.codigo_empresa}</td>
+                                            <td>{servicio.extintor.sucursal.nombre_sucursal}</td>
+                                            <td>{servicio.extintor.marca}</td>
+                                            <td>{servicio.extintor.capacidad}</td>
+                                            <td>{servicio.fecha_servicio.slice(0, 10)}</td>
+                                            <td>{servicio.extintor.ubicacion}</td>
+                                            <td>
+                                                {servicio.servicio_trabajos.length > 0
+                                                    ? servicio.servicio_trabajos.map(servicioTrabajo => servicioTrabajo.trabajo.nombre_trabajo).join(', ')
+                                                    : 'No se hizo trabajos'}
+                                            </td>
+                                            <td className="accion">
+                                                <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(servicio.id)}>Reintegrar</button>
+                                                <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(servicio.id)}>Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
 
