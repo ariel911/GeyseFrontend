@@ -5,7 +5,7 @@ import c3 from "../img/elaboracion de programas de seguridad.jpg";
 
 const Carousel = () => {
   return (
-    <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExample" className="carousel slide mt-5" data-bs-ride="carousel">
       <div className="carousel-inner">
         <div className="carousel-item active" data-bs-interval="3000">
           <img src={c1} className="d-block w-100 img-fluid" alt="Imagen 1" />
