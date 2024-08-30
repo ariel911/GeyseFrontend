@@ -2,13 +2,17 @@
 
 body {
     font-family: Arial, sans-serif;
+    padding-top: 80px; 
 }
 
 /* Navbar */
 #menu {
     background-color: #f8f9fa;
 }
-
+.navbar {
+ 
+    border-bottom: #ececec solid 0.5px;
+}
 /* Carousel */
 .carousel-inner img {
     height: 500px;
@@ -49,6 +53,7 @@ body {
 .seccion-contacto {
     background-color: #fff;
     padding: 1rem 0;
+  /*   margin-top: 50px; */
 }
 
 /* Footer */
@@ -69,6 +74,7 @@ footer {
 
 .seccion-contacto h1 {
     color: #343a40;
+
 }
 
 .seccion-contacto .form-control {

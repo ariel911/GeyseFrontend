@@ -23,31 +23,34 @@ const Locations = () => {
   ];
 
   return (
-    <section className="local">
-      <div className="container w-50 m-auto text-center" id="local">
-        <h1 className="fs-2 border-bottom border-3">Nuestras <span className="text-primary">Sucursales</span>.</h1>
-      </div>
-      <div className="container">
-        <div className="row">
-          {locations.map((location, index) => (
-            <div className="col-lg-6 col-md-6 col-sm-12 p-2" key={index}>
-              <h3 className="text-primary fs-5">{location.city}</h3>
-              <p>{location.address}</p>
-              <p>{location.services}</p>
-              <iframe
-                src={location.mapSrc}
-                width="350"
-                height="250"
-                style={{ border: 0, margin: '0 auto' }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade">
-              </iframe>
-            </div>
-          ))}
+    <div className='w-100' id="local">
+      <section className="local">
+        <div className="d-flex flex-column justify-content-center align-items-center text-center w-50 m-auto mt-5">
+          <h1 className="fs-2 border-bottom border-3 mt-5">Nuestras <span className="text-primary">Sucursales</span>.</h1>
         </div>
-      </div>
-    </section>
+        <div className="container">
+          <div className="row">
+            {locations.map((location, index) => (
+              <div className="col-lg-6 col-md-6 col-sm-12 p-2" key={index}>
+                <h3 className="text-primary fs-5">{location.city}</h3>
+                <p>{location.address}</p>
+                <p>{location.services}</p>
+                <iframe
+                  src={location.mapSrc}
+                  width="350"
+                  height="250"
+                  style={{ border: 0, margin: '0 auto' }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade">
+                </iframe>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+
   );
 }
 

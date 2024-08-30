@@ -1,13 +1,14 @@
 import React from 'react';
 import logo from '../img/logo.png';
 import { Link } from 'react-router-dom'; // Importa Link de react-router-dom
+import '../main.css'
 
 const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light p-3" id="menu">
-      <div className="container d-flex justify-content-between align-items-center">
+    <nav className="navbar navbar-expand-lg navbar-light p-3 fixed-top  " id="menu">
+      <div className="container d-flex justify-content-between align-items-center ">
         <a className="navbar-brand" href="#carouselExample">
-          <img src={logo} alt="" height="70" width="180" />
+          <img src={logo} alt="Logo" height="70" width="180" />
         </a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

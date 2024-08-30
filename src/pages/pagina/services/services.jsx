@@ -15,26 +15,29 @@ const Services = () => {
   ];
 
   return (
-    <section className="w-100 servicios" id="servicio">
-      <div className="d-flex flex-column justify-content-center align-items-center pt-1 text-center w-50 m-auto" id="intro">
-        <h1 className="fs-2 border-bottom border-3">Nuestros <span className="text-primary">Servicios</span>.</h1>
-      </div>
-      <div className="container mb-5 d-flex justify-content-center w-75">
-        <div className="row justify-content-center" id="fila-servicios">
-          {servicios.map((servicio, index) => (
-            <div className="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center my-4" key={index}>
-              <div className="card d-flex align-items-center text-center" style={{ width: '18rem' }}>
-                <img src={servicio.img} className="card-img-top" alt={servicio.title} />
-                <div className="card-body">
-                  <h5 className="card-title">{servicio.title}</h5>
-                  {servicio.description && <p className="card-text">{servicio.description}</p>}
+    <div className='w-100' id="servicio">
+
+      <section className="w-100 servicios"  >
+        <div className="d-flex flex-column justify-content-center align-items-center text-center w-50 m-auto mt-3" id="intro">
+          <h1 className="fs-2 border-bottom border-3 mt-5">Nuestros <span className="text-primary">Servicios</span>.</h1>
+        </div>
+        <div className="container mb-5 d-flex justify-content-center w-75">
+          <div className="row justify-content-center" id="fila-servicios">
+            {servicios.map((servicio, index) => (
+              <div className="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center my-4" key={index}>
+                <div className="card d-flex align-items-center text-center" style={{ width: '18rem' }}>
+                  <img src={servicio.img} className="card-img-top" alt={servicio.title} />
+                  <div className="card-body">
+                    <h5 className="card-title">{servicio.title}</h5>
+                    {servicio.description && <p className="card-text">{servicio.description}</p>}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 
