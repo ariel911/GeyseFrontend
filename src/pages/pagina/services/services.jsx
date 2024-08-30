@@ -18,8 +18,8 @@ const Services = () => {
     <div className='w-100' id="servicio">
 
       <section className="w-100 servicios"  >
-        <div className="d-flex flex-column justify-content-center align-items-center text-center w-50 m-auto mt-3" id="intro">
-          <h1 className="fs-2 border-bottom border-3 mt-5">Nuestros <span className="text-primary">Servicios</span>.</h1>
+        <div className="d-flex flex-column justify-content-center align-items-center text-center w-50 m-auto mt-5" id="intro">
+          <h1 className="fs-2 border-bottom border-3 mt-3">Nuestros <span className="text-primary">Servicios</span>.</h1>
         </div>
         <div className="container mb-5 d-flex justify-content-center w-75">
           <div className="row justify-content-center" id="fila-servicios">

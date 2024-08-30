@@ -25,8 +25,8 @@ const Locations = () => {
   return (
     <div className='w-100' id="local">
       <section className="local">
-        <div className="d-flex flex-column justify-content-center align-items-center text-center w-50 m-auto mt-5">
-          <h1 className="fs-2 border-bottom border-3 mt-5">Nuestras <span className="text-primary">Sucursales</span>.</h1>
+        <div className="container w-50 m-auto text-center  mt-5">
+          <h1 className="fs-2 border-bottom border-3">Nuestras <span className="text-primary">Sucursales</span>.</h1>
         </div>
         <div className="container">
           <div className="row">
