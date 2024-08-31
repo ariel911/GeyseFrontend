@@ -32,10 +32,10 @@ const Home = ({ componente }) => {
             <img src={logo} className='logoGeyse' />
           </div>
         </Link>
-        <p htmlFor="nav_check" className='barraMenu' >
+        <label htmlFor="nav_check" className='barraMenu' >
 
           <FontAwesomeIcon className='faBars ' icon={faBars} style={{ "--fa-primary-color": "#ffffff", "--fa-secondary-color": "#b0b0b0", }} />
-        </p>
+        </label>
 
       </div>
       <div className='centro'>
