@@ -26,7 +26,7 @@ const Contact = () => {
                             <textarea className="form-control" name='message' id="exampleFormControlTextarea1" rows="3" placeholder="Escribe tu mensaje"></textarea>
                         </div>
                         <button type="submit" className="btn btn-primary w-100">Enviar</button>
-                        <input type="hidden" name="_next" value="http://localhost:5173/Pagina#seccion-contacto" />
+                        <input type="hidden" name="_next" value="https://geyseproyect.netlify.app/pagina#seccion-contacto" />
                         <input type="hidden" name="_captcha" value="false" />
                     </form>
                 </div>
