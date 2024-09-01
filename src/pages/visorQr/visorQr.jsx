@@ -29,7 +29,7 @@ const QrScannerComponent = () => {
     const [fecha_inspeccion, setfecha_inspeccion] = useState('');
 
     const usuarioId = localStorage.getItem('usuarioId');
-    const token = localStorage.getItem('token');
+    const token2 = localStorage.getItem('token22');
 
     const handleScanButtonClick = () => {
         setIsScanning(true);
@@ -54,7 +54,7 @@ const QrScannerComponent = () => {
             url: "https://backendgeyse.onrender.com/api/estado",
             method: "GET",
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token2}`,
             },
         });
         setestados(res.data.data.estado);
@@ -64,7 +64,7 @@ const QrScannerComponent = () => {
             url: "https://backendgeyse.onrender.com/api/inspeccion",
             method: "GET",
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token2}`,
             },
         });
         const filteredInspecciones = res.data.data.inspecion.filter(inspeccion => inspeccion.extintor.id === extintor.id);
@@ -77,7 +77,7 @@ const QrScannerComponent = () => {
             fetch('https://backendgeyse.onrender.com/api/extintor', {
                 method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token2}`,
                     
                 }
             })
@@ -105,7 +105,7 @@ const QrScannerComponent = () => {
                         fetch('https://backendgeyse.onrender.com/api/inspeccion', {
                             method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                             headers: {
-                                'Authorization': `Bearer ${token}`,
+                                'Authorization': `Bearer ${token2}`,
                                
                             }
                         })
@@ -120,7 +120,7 @@ const QrScannerComponent = () => {
                         fetch('https://backendgeyse.onrender.com/api/servicio', {
                             method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                             headers: {
-                                'Authorization': `Bearer ${token}`,
+                                'Authorization': `Bearer ${token2}`,
                                
                             }
                         })
@@ -178,7 +178,7 @@ const QrScannerComponent = () => {
                         fetch('https://backendgeyse.onrender.com/api/extintor', {
                             method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                             headers: {
-                                'Authorization': `Bearer ${token}`,
+                                'Authorization': `Bearer ${token2}`,
 
                             }
                         })
@@ -206,7 +206,7 @@ const QrScannerComponent = () => {
                                     fetch('https://backendgeyse.onrender.com/api/inspeccion', {
                                         method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                                         headers: {
-                                            'Authorization': `Bearer ${token}`,
+                                            'Authorization': `Bearer ${token2}`,
 
                                         }
                                     })
@@ -221,7 +221,7 @@ const QrScannerComponent = () => {
                                     fetch('https://backendgeyse.onrender.com/api/servicio', {
                                         method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                                         headers: {
-                                            'Authorization': `Bearer ${token}`,
+                                            'Authorization': `Bearer ${token2}`,
 
                                         }
                                     })
@@ -320,7 +320,7 @@ const QrScannerComponent = () => {
                     estados: selectedEstados
                 }, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${token2}`,
                 },
             }
             );
@@ -344,7 +344,7 @@ const QrScannerComponent = () => {
         }
     };
     const handleLogOut = () => {
-        localStorage.removeItem("token");
+        localStorage.removeItem("token2");
         localStorage.removeItem("nombre");
         localStorage.removeItem("id");
         localStorage.removeItem("Rol");
