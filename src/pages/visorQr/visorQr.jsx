@@ -78,7 +78,7 @@ const QrScannerComponent = () => {
                 method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    
                 }
             })
                 .then(response => response.json())
@@ -106,7 +106,7 @@ const QrScannerComponent = () => {
                             method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                             headers: {
                                 'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
+                               
                             }
                         })
                             .then(response => response.json())
@@ -121,7 +121,7 @@ const QrScannerComponent = () => {
                             method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
                             headers: {
                                 'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
+                               
                             }
                         })
                             .then(response => response.json())
@@ -471,7 +471,7 @@ const QrScannerComponent = () => {
                                 }
 
                                 {/* Mostrar mensaje si no hay inspecciones con estado igual a 0 */}
-                                {inspecciones.filter(inspeccion => inspeccion.estado === 0).length === 0 && (
+                                {inspecciones.filter(inspeccion => inspeccion.estado === 1).length === 0 && (
                                     <p>No hay inspecciones para este extintor.</p>
                                 )}
                             </div>
@@ -497,7 +497,7 @@ const QrScannerComponent = () => {
                                 }
 
                                 {/* Mostrar mensaje si no hay servicios con estado igual a 0 */}
-                                {servicios.filter(servicio => servicio.estado === 0).length === 0 && (
+                                {servicios.filter(servicio => servicio.estado === 1).length === 0 && (
                                     <p>No hay servicios para este extintor.</p>
                                 )}
                             </div>
@@ -536,7 +536,7 @@ const QrScannerComponent = () => {
                                 }
 
                                 {/* Mostrar mensaje si no hay extintores con estado igual a 0 */}
-                                {filteredExtintoresSucursal.filter(ext => ext.estado === 0).length === 0 && (
+                                {filteredExtintoresSucursal.filter(ext => ext.estado === 1).length === 0 && (
                                     <p className="card-text">No hay extintores registrados en esta sucursal.</p>
                                 )}
                             </div>
@@ -565,7 +565,7 @@ const QrScannerComponent = () => {
                                 }
 
                                 {/* Mostrar mensaje si no hay extintores con estado igual a 0 */}
-                                {filteredExtintoresCliente.filter(ext => ext.estado === 0).length === 0 && (
+                                {filteredExtintoresCliente.filter(ext => ext.estado === 1).length === 0 && (
                                     <p className="card-text">No hay extintores registrados para este cliente.</p>
                                 )}
                             </div>
