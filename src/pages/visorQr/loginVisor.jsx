@@ -17,19 +17,19 @@ const Login = () => {
     try {
       if (!usuarioAcceso.includes('@')) {
         const res = await axios({
-          url: "https://backendGeyse.onrender.com/auth/login",
+          url: "https://backendGeyse.onrender.com/auth/loginCliente",
           method: 'POST',
           data: {
-            correo: usuarioAcceso,
+            usuario_acceso: usuarioAcceso,
             clave: clave
           }
         });
         console.log("resdata",res.data.data)
         if (res.data.data) {
           setIsAuthenticated(true);
-          console.log("cliente:", cliente)
-          localStorage.setItem("token2", res.data.data.token);
-          localStorage.setItem("idCliente", cliente.id);
+          
+          localStorage.setItem("token", res.data.data.token);
+          localStorage.setItem("idCliente", res.data.data.cliente.id);
           navigate('/pagina/extintoresQr');
         } else {
           setError('Usuario o clave incorrectos');
@@ -47,7 +47,7 @@ const Login = () => {
         if (res.data.data) {
           setIsAuthenticated(true);
           console.log("usuario:", res.data.data)
-          localStorage.setItem("token2", res.data.data.token);
+          localStorage.setItem("token", res.data.data.token);
           localStorage.setItem("idCliente", res?.data?.data?.usuario?.id);
           localStorage.setItem("usuarioId", res?.data?.data?.usuario?.id);
          
