@@ -24,11 +24,9 @@ const Login = () => {
             clave: clave
           }
         });
-        console.log("resdata",res.data.data)
         if (res.data.data) {
           setIsAuthenticated(true);
-          
-          localStorage.setItem("token", res.data.data.token);
+          localStorage.setItem("token2", res.data.data.token);
           localStorage.setItem("idCliente", res.data.data.cliente.id);
           navigate('/pagina/extintoresQr');
         } else {
@@ -46,8 +44,7 @@ const Login = () => {
         });
         if (res.data.data) {
           setIsAuthenticated(true);
-          console.log("usuario:", res.data.data)
-          localStorage.setItem("token", res.data.data.token);
+          localStorage.setItem("token2", res.data.data.token);
           localStorage.setItem("idCliente", res?.data?.data?.usuario?.id);
           localStorage.setItem("usuarioId", res?.data?.data?.usuario?.id);
          

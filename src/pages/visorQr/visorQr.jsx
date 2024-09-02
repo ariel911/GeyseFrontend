@@ -29,7 +29,7 @@ const QrScannerComponent = () => {
     const [fecha_inspeccion, setfecha_inspeccion] = useState('');
 
     const usuarioId = localStorage.getItem('usuarioId');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token2');
 
     const handleScanButtonClick = () => {
         setIsScanning(true);
@@ -72,90 +72,107 @@ const QrScannerComponent = () => {
     };
     useEffect(() => {
         if (extintor) {
-            const codigoEmpresa = extintor.codigo_empresa; // El código de empresa proporcionado por el QR
-
-            fetch('https://backendgeyse.onrender.com/api/extintor', {
-                method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const extintores = data.data.extintor;
-                    const extintorData = extintores.find(ext => ext.codigo_empresa === codigoEmpresa);
-
-                    if (extintorData) {
+            if (extintor.estado === 1 && extintor.sucursal.estado === 1) {
 
 
-                        const nombre_sucursal = extintorData?.sucursal?.nombre_sucursal;
-                        const nombre_cliente = extintorData?.sucursal?.cliente?.nombre_cliente;
+                const codigoEmpresa = extintor.codigo_empresa; // El código de empresa proporcionado por el QR
+
+                fetch('https://backendgeyse.onrender.com/api/extintor', {
+                    method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const extintores = data.data.extintor;
+                        const extintorData = extintores.find(ext => ext.codigo_empresa === codigoEmpresa);
+
+                        if (extintorData) {
 
 
-                        // Fetch extintores de la misma sucursal
-                        const filteredExtintoresSucursal = extintores.filter(ext => ext.sucursal.nombre_sucursal === nombre_sucursal);
-                        setExtintoresSucursal(filteredExtintoresSucursal);
+                            const nombre_sucursal = extintorData?.sucursal?.nombre_sucursal;
+                            const nombre_cliente = extintorData?.sucursal?.cliente?.nombre_cliente;
 
-                        // Fetch extintores del mismo cliente
-                        const filteredExtintoresCliente = extintores.filter(ext => ext.sucursal.cliente.nombre_cliente === nombre_cliente);
-                        setExtintoresCliente(filteredExtintoresCliente);
 
-                        // Fetch inspecciones del extintor
-                        fetch('https://backendgeyse.onrender.com/api/inspeccion', {
-                            method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                               
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                const filteredInspecciones = data.data.inspecion.filter(inspeccion => inspeccion.extintor.id === extintorData.id);
-                                setInspecciones(filteredInspecciones);
+                            // Fetch extintores de la misma sucursal
+                            const filteredExtintoresSucursal = extintores.filter(ext => ext.sucursal.nombre_sucursal === nombre_sucursal);
+                            setExtintoresSucursal(filteredExtintoresSucursal);
+
+                            // Fetch extintores del mismo cliente
+                            const filteredExtintoresCliente = extintores.filter(ext => ext.sucursal.cliente.nombre_cliente === nombre_cliente);
+                            setExtintoresCliente(filteredExtintoresCliente);
+
+                            // Fetch inspecciones del extintor
+                            fetch('https://backendgeyse.onrender.com/api/inspeccion', {
+                                method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+
+                                }
                             })
-                            .catch(error => console.error('Error fetching inspecciones:', error));
+                                .then(response => response.json())
+                                .then(data => {
+                                    const filteredInspecciones = data.data.inspecion.filter(inspeccion => 
+                                        inspeccion.extintor.id === extintorData.id && inspeccion.estado === 1
+                                    );
+                                    setInspecciones(filteredInspecciones);
+                                    
+                                })
+                                .catch(error => console.error('Error fetching inspecciones:', error));
 
-                        // Fetch servicios del extintor
-                        fetch('https://backendgeyse.onrender.com/api/servicio', {
-                            method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                               
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                const filteredServicios = data.data.servicio.filter(servicio => servicio.extintor.id === extintorData.id);
-                                setServicios(filteredServicios);
+                            // Fetch servicios del extintor
+                            fetch('https://backendgeyse.onrender.com/api/servicio', {
+                                method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+
+                                }
                             })
-                            .catch(error => console.error('Error fetching servicios:', error));
+                                .then(response => response.json())
+                                .then(data => {
+                                    const filteredServicios = data.data.servicio.filter(servicio =>
+                                        servicio.extintor.id === extintorData.id && servicio.estado === 1
+                                    );
+                                    setServicios(filteredServicios);
 
-                        const closeButton = document.querySelector('#changePasswordModal .btn-close');
-                        if (closeButton) {
-                            closeButton.click();
+                                })
+                                .catch(error => console.error('Error fetching servicios:', error));
+
+                            const closeButton = document.querySelector('#changePasswordModal .btn-close');
+                            if (closeButton) {
+                                closeButton.click();
+                            }
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'No se encontró un extintor con el código de empresa proporcionado.',
+                                icon: 'error',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
                         }
-                    } else {
+                    })
+                    .catch(error => {
+                        console.error('Error fetching extintor:', error);
                         Swal.fire({
                             title: 'Error',
-                            text: 'No se encontró un extintor con el código de empresa proporcionado.',
+                            text: 'Hubo un error al obtener los datos del extintor.',
                             icon: 'error',
                             timer: 2000,
                             showConfirmButton: false
                         });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching extintor:', error);
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Hubo un error al obtener los datos del extintor.',
-                        icon: 'error',
-                        timer: 2000,
-                        showConfirmButton: false
                     });
+            } /* else {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "El extintor esta dado de baja",
+                    showConfirmButton: false,
+                    timer: 1500
                 });
-
+            } */
         }
 
     }, [extintor]);
@@ -184,67 +201,73 @@ const QrScannerComponent = () => {
                         })
                             .then(response => response.json())
                             .then(data => {
-                                
+
                                 const extintores = data.data.extintor;
                                 const extintorData = extintores.find(ext => ext.codigo_empresa === codigoEmpresa);
 
                                 if (extintorData) {
-                                    setExtintor(extintorData);
+                                    if (extintorData.estado === 1 && extintorData.sucursal.estado === 1) {
+                                        setExtintor(extintorData);
 
-                                    const nombre_sucursal = extintorData?.sucursal?.nombre_sucursal;
-                                    const nombre_cliente = extintorData?.sucursal?.cliente?.nombre_cliente;
-                                    console.log(extintorData);
+                                        const nombre_sucursal = extintorData?.sucursal?.nombre_sucursal;
+                                        const nombre_cliente = extintorData?.sucursal?.cliente?.nombre_cliente;
 
-                                    // Fetch extintores de la misma sucursal
-                                    const filteredExtintoresSucursal = extintores.filter(ext => ext.sucursal.nombre_sucursal === nombre_sucursal);
-                                    setExtintoresSucursal(filteredExtintoresSucursal);
 
-                                    // Fetch extintores del mismo cliente
-                                    const filteredExtintoresCliente = extintores.filter(ext => ext.sucursal.cliente.nombre_cliente === nombre_cliente);
-                                    setExtintoresCliente(filteredExtintoresCliente);
+                                        // Fetch extintores de la misma sucursal
+                                        const filteredExtintoresSucursal = extintores.filter(ext => ext.sucursal.nombre_sucursal === nombre_sucursal);
+                                        setExtintoresSucursal(filteredExtintoresSucursal);
 
-                                    // Fetch inspecciones del extintor
-                                    fetch('https://backendgeyse.onrender.com/api/inspeccion', {
-                                        method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
-                                        headers: {
-                                            'Authorization': `Bearer ${token}`,
+                                        // Fetch extintores del mismo cliente
+                                        const filteredExtintoresCliente = extintores.filter(ext => ext.sucursal.cliente.nombre_cliente === nombre_cliente);
+                                        setExtintoresCliente(filteredExtintoresCliente);
 
-                                        }
-                                    })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            const filteredInspecciones = data.data.inspecion.filter(inspeccion => inspeccion.extintor.id === extintorData.id);
-                                            setInspecciones(filteredInspecciones);
+                                        // Fetch inspecciones del extintor
+                                        fetch('https://backendgeyse.onrender.com/api/inspeccion', {
+                                            method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                                            headers: {
+                                                'Authorization': `Bearer ${token}`,
+
+                                            }
                                         })
-                                        .catch(error => console.error('Error fetching inspecciones:', error));
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                const filteredInspecciones = data.data.inspecion.filter(inspeccion =>
+                                                    inspeccion.extintor.id === extintorData.id && inspeccion.estado === 1
+                                                );
+                                                setInspecciones(filteredInspecciones);
+                                            })
+                                            .catch(error => console.error('Error fetching inspecciones:', error));
 
-                                    // Fetch servicios del extintor
-                                    fetch('https://backendgeyse.onrender.com/api/servicio', {
-                                        method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
-                                        headers: {
-                                            'Authorization': `Bearer ${token}`,
+                                        // Fetch servicios del extintor
+                                        fetch('https://backendgeyse.onrender.com/api/servicio', {
+                                            method: 'GET', // Especifica el método si es necesario (GET es el predeterminado)
+                                            headers: {
+                                                'Authorization': `Bearer ${token}`,
 
-                                        }
-                                    })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            const filteredServicios = data.data.servicio.filter(servicio => servicio.extintor.id === extintorData.id);
-                                            setServicios(filteredServicios);
+                                            }
                                         })
-                                        .catch(error => console.error('Error fetching servicios:', error));
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                const filteredServicios = data.data.servicio.filter(servicio =>
+                                                    servicio.extintor.id === extintorData.id && servicio.estado === 1
+                                                );
+                                                setServicios(filteredServicios);
+                                            })
+                                            .catch(error => console.error('Error fetching servicios:', error));
 
-                                    const closeButton = document.querySelector('#changePasswordModal .btn-close');
-                                    if (closeButton) {
-                                        closeButton.click();
+                                        const closeButton = document.querySelector('#changePasswordModal .btn-close');
+                                        if (closeButton) {
+                                            closeButton.click();
+                                        }
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: 'Extintor o sucursal dado de baja',
+                                            icon: 'error',
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        });
                                     }
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: 'No se encontró un extintor con el código de empresa proporcionado.',
-                                        icon: 'error',
-                                        timer: 2000,
-                                        showConfirmButton: false
-                                    });
                                 }
                             })
                             .catch(error => {
@@ -345,11 +368,7 @@ const QrScannerComponent = () => {
         }
     };
     const handleLogOut = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("nombre");
-        localStorage.removeItem("id");
-        localStorage.removeItem("Rol");
-        localStorage.removeItem("user"); // Asegúrate de eliminar toda la información del usuario
+        localStorage.removeItem("token2");
         localStorage.removeItem("usuarioId"); // Asegúrate de eliminar toda la información del usuario
         localStorage.removeItem("idCliente"); // Asegúrate de eliminar toda la información del usuario
         /*  navigate('/pagina/login') */
@@ -456,7 +475,7 @@ const QrScannerComponent = () => {
                                 <h5 className="card-title mt-4">Inspecciones</h5>
 
                                 {inspecciones
-                                    .filter(inspeccion => inspeccion.estado === 1 && inspeccion.extintor.sucursal.estado === 1 && inspeccion.extintor.sucursal.cliente.estado == 1 ) // Filtrar inspecciones con estado igual a 0
+                                    .filter(inspeccion => inspeccion.estado === 1 && inspeccion.extintor.sucursal.estado === 1 && inspeccion.extintor.sucursal.cliente.estado == 1) // Filtrar inspecciones con estado igual a 0
                                     .map(inspeccion => (
                                         <div key={inspeccion.id} className="card mb-3">
                                             <div className="card-body">
@@ -553,7 +572,7 @@ const QrScannerComponent = () => {
                                 />
                                 <hr />
                                 {filteredExtintoresCliente
-                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado=== 1 && ext.sucursal.cliente.estado == 1 ) // Filtrar extintores con estado igual a 0
+                                    .filter(ext => ext.estado === 1 && ext.sucursal.estado === 1 && ext.sucursal.cliente.estado == 1) // Filtrar extintores con estado igual a 0
                                     .map((ext, index) => (
                                         <div key={index}>
                                             <p className="card-text"><strong>Código del Extintor:</strong> {ext.codigo_extintor}</p>

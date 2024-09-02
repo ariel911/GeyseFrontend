@@ -528,6 +528,7 @@ const extintor = () => {
                                     <th scope="col">Nº</th>
                                     <th scope="col">Cod. Extintor</th>
                                     <th scope="col">Cod. Empresa</th>
+                                    <th scope="col">Sucursal</th>
                                     <th scope="col">Ubicación</th>
                                     <th scope="col">Marca</th>
                                     <th scope="col">Capacidad</th>
@@ -542,6 +543,7 @@ const extintor = () => {
                                             <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
                                             <td>{extintor.codigo_extintor}</td>
                                             <td>{extintor.codigo_empresa}</td>
+                                            <td>{extintor.sucursal.nombre_sucursal}</td>
                                             <td>{extintor.ubicacion}</td>
                                             <td>{extintor.marca}</td>
                                             <td>{extintor.capacidad}</td>
