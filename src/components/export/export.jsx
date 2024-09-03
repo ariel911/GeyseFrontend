@@ -90,8 +90,42 @@ const ExportExcel = () => {
             { header: 'Observaciones', key: 'observaciones', width: 15 },
             { header: 'Fecha Registro', key: 'fecha_registro', width: 20 },
             { header: 'Cliente', key: 'cliente', width: 20 },
+            { header: 'Estado', key: 'estado', width: 20 },
         ];
+        worksheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                if (rowNumber === 1) {
+                    // Estilos para la primera fila (encabezados)
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FF1CB3E2' } // Color de fondo azul claro
+                    };
+                    cell.font = {
+                        bold: true,
+                        color: { argb: 'FF000000' } // Color de texto negro
+                    };
+                    cell.alignment = { horizontal: 'center' }; // Alineación centrada
+                }
 
+                if (rowNumber > 1) {
+                    // Estilos para las filas siguientes
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFC8F9FF' } // Color gris claro (asegúrate de que sea un valor ARGB válido)
+                    };
+                }
+
+                // Aplicar bordes a todas las celdas
+                cell.border = {
+                    top: { style: 'thin', color: { argb: 'FF000000' } }, // Color negro
+                    left: { style: 'thin', color: { argb: 'FF000000' } },
+                    bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                    right: { style: 'thin', color: { argb: 'FF000000' } }
+                };
+            });
+        });
         // Ordenar los extintores por nombre de cliente
         const sortedExtintores = extintores
             .filter(extintor => extintor.estado === 1)
@@ -112,7 +146,8 @@ const ExportExcel = () => {
                 capacidad: extintor.capacidad,
                 observaciones: extintor.observaciones,
                 fecha_registro: extintor.fecha_registro.slice(0, 10),
-                cliente: extintor?.sucursal?.cliente?.nombre_cliente || 'N/A'
+                cliente: extintor?.sucursal?.cliente?.nombre_cliente || 'N/A',
+                estado: ((extintor.estado === 1 && extintor.sucursal.estado === 1) && extintor.sucursal.cliente.estado === 1) ? 'Activo' : 'Inactivo'
             };
         });
 
@@ -128,9 +163,44 @@ const ExportExcel = () => {
             { header: 'Cod. Extintor', key: 'codigo_extintor', width: 20 },
             { header: 'Cod. Empresa', key: 'codigo_empresa', width: 20 },
             { header: 'Proximo PH', key: 'proximo_ph', width: 20 },
-            { header: 'Proximo Mantenimiento', key: 'proximo_mantenimiento', width: 20 },
+            { header: 'Proximo Mantenimiento', key: 'proximo_mantenimiento', width: 25 },
+            { header: 'Estado', key: 'estado', width: 20 },
         ];
 
+        worksheet2.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                if (rowNumber === 1) {
+                    // Estilos para la primera fila (encabezados)
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FF1CB3E2' } // Color de fondo azul claro
+                    };
+                    cell.font = {
+                        bold: true,
+                        color: { argb: 'FF000000' } // Color de texto negro
+                    };
+                    cell.alignment = { horizontal: 'center' }; // Alineación centrada
+                }
+
+                if (rowNumber > 1) {
+                    // Estilos para las filas siguientes
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFC8F9FF' } // Color gris claro (asegúrate de que sea un valor ARGB válido)
+                    };
+                }
+
+                // Aplicar bordes a todas las celdas
+                cell.border = {
+                    top: { style: 'thin', color: { argb: 'FF000000' } }, // Color negro
+                    left: { style: 'thin', color: { argb: 'FF000000' } },
+                    bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                    right: { style: 'thin', color: { argb: 'FF000000' } }
+                };
+            });
+        });
         let rowIndexServicios = 1;
         const empresaToRowMap = {};
 
@@ -152,6 +222,7 @@ const ExportExcel = () => {
                         codigo_empresa: servicio.extintor.codigo_empresa || 'N/A',
                         proximo_ph: servicio.proximo_ph ? servicio.proximo_ph.slice(0, 10) : 'N/A',
                         proximo_mantenimiento: servicio.proximo_mantenimiento ? servicio.proximo_mantenimiento.slice(0, 10) : 'N/A',
+                        estado: (((servicio.estado === 1 && servicio.extintor.sucursal.estado === 1) && (servicio.extintor.sucursal.cliente.estado === 1 && servicio.extintor.estado === 1))) ? 'Activo' : 'Inactivo'
                     });
 
                     const codigoEmpresa = servicio.extintor.codigo_empresa;
@@ -167,11 +238,45 @@ const ExportExcel = () => {
         worksheet3.columns = [
             { header: 'Nº', key: 'numero', width: 10 },
             { header: 'Fecha de Inspección', key: 'fecha_inspeccion', width: 20 },
-            { header: 'Desperfectos', key: 'estado', width: 20 },
+            { header: 'Desperfectos', key: 'estados', width: 20 },
             { header: 'Cod. Extintor', key: 'codigo_extintor', width: 20 },
             { header: 'Observaciones', key: 'observaciones', width: 30 },
+            { header: 'Estado', key: 'estado', width: 20 },
         ];
+        worksheet3.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                if (rowNumber === 1) {
+                    // Estilos para la primera fila (encabezados)
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FF1CB3E2' } // Color de fondo azul claro
+                    };
+                    cell.font = {
+                        bold: true,
+                        color: { argb: 'FF000000' } // Color de texto negro
+                    };
+                    cell.alignment = { horizontal: 'center' }; // Alineación centrada
+                }
 
+                if (rowNumber > 1) {
+                    // Estilos para las filas siguientes
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFC8F9FF' } // Color gris claro (asegúrate de que sea un valor ARGB válido)
+                    };
+                }
+
+                // Aplicar bordes a todas las celdas
+                cell.border = {
+                    top: { style: 'thin', color: { argb: 'FF000000' } }, // Color negro
+                    left: { style: 'thin', color: { argb: 'FF000000' } },
+                    bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                    right: { style: 'thin', color: { argb: 'FF000000' } }
+                };
+            });
+        });
         let rowIndexInspecciones = 1;
         const extintorToRowMap = {};
 
@@ -188,9 +293,10 @@ const ExportExcel = () => {
                     worksheet3.addRow({
                         numero: index + 1,
                         fecha_inspeccion: inspeccion.fecha_inspeccion ? inspeccion.fecha_inspeccion.slice(0, 10) : 'N/A',
-                        estado: inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', '),
+                        estados: inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', '),
                         codigo_extintor: inspeccion.extintor.codigo_extintor || 'N/A',
                         observaciones: inspeccion.observaciones || 'N/A',
+                        estado: (((inspeccion.estado === 1 && inspeccion.extintor.sucursal.estado === 1) && (inspeccion.extintor.sucursal.cliente.estado === 1 && inspeccion.extintor.estado === 1))) ? 'Activo' : 'Inactivo'
                     });
 
                     const codigoExtintor = inspeccion.extintor.codigo_extintor;
@@ -221,6 +327,7 @@ const ExportExcel = () => {
 
         saveAs(blob, 'Extintores_Servicios_Inspecciones.xlsx');
     };
+    // Aplicar estilo a la fila de encabezado
 
     return (
         <div>
