@@ -54,7 +54,7 @@ const NavBar = ({ brand }) => {
     return (
         <nav className={`navegacion ${isMenuHidden ? 'menu-show' : 'menu-hidden'}`}>
             <ul className='ul'>
-                {((menuPermissions.includes('usuarios') || (menuPermissions.includes('cargos')) || (menuPermissions.includes('clientes')) || (menuPermissions.includes('sucursales'))) || menuPermissions.includes('todo')) && (
+                {((menuPermissions.includes('Usuarios') || (menuPermissions.includes('Cargos')) || (menuPermissions.includes('Clientes')) || (menuPermissions.includes('Sucursales'))) || menuPermissions.includes('Todo')) && (
                     <li className='elemento elemento1'>
                         <label htmlFor="check" className='text barraSubMenu'>
                             <div className='div1'>
@@ -67,14 +67,14 @@ const NavBar = ({ brand }) => {
                         </label>
                         <input type="checkbox" id='check' hidden />
                         <ul className='submenu subm2'>
-                            {(menuPermissions.includes('todo') || menuPermissions.includes('usuarios')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_USUARIO}>Usuarios</Link></li>}
-                            {(menuPermissions.includes('todo') || menuPermissions.includes('cargos')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_ROL}>Cargos</Link></li>}
-                            {(menuPermissions.includes('todo') || menuPermissions.includes('clientes')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_CLIENTE}>Clientes</Link></li>}
-                            {(menuPermissions.includes('todo') || menuPermissions.includes('sucursales')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_SUCURSAL}>Sucursales</Link></li>}
+                            {(menuPermissions.includes('Todo') || menuPermissions.includes('Usuarios')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_USUARIO}>Usuarios</Link></li>}
+                            {(menuPermissions.includes('Todo') || menuPermissions.includes('Cargos')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_ROL}>Cargos</Link></li>}
+                            {(menuPermissions.includes('Todo') || menuPermissions.includes('Clientes')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_CLIENTE}>Clientes</Link></li>}
+                            {(menuPermissions.includes('Todo') || menuPermissions.includes('Sucursales')) && <li className='subitem' onClick={handleMenuClick}><Link to={HOME_SUCURSAL}>Sucursales</Link></li>}
                         </ul>
                     </li>
                 )}
-                {(menuPermissions.includes('todo') || menuPermissions.includes('extintores')) && (
+                {(menuPermissions.includes('Todo') || menuPermissions.includes('Extintores')) && (
                     <li className='elemento' onClick={handleMenuClick}>
                         <Link to={HOME_EXTINTOR} className='text'>
                             <div className='div1'>
@@ -84,7 +84,7 @@ const NavBar = ({ brand }) => {
                         </Link>
                     </li>
                 )}
-                {(menuPermissions.includes('todo') || menuPermissions.includes('servicios')) && (
+                {(menuPermissions.includes('Todo') || menuPermissions.includes('Servicios')) && (
                     <li className='elemento elemento2' onClick={handleMenuClick}>
                         <Link to={HOME_SERVICIO} className='text'>
                             <div className='div1 barraSubMenu2'>
@@ -94,7 +94,7 @@ const NavBar = ({ brand }) => {
                         </Link>
                     </li>
                 )}
-                {(menuPermissions.includes('todo') || menuPermissions.includes('inspeccion')) && (
+                {(menuPermissions.includes('Todo') || menuPermissions.includes('inspeccion')) && (
                     <li className='elemento elemento3' onClick={handleMenuClick}>
                         <Link to={HOME_INSPECCION} className='text'>
                             <div className='div1'>
