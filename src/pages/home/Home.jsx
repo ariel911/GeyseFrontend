@@ -41,7 +41,7 @@ const Home = ({ componente }) => {
       <div className='centro'>
         <input type="checkbox" id='nav_check' hidden />
 
-        <NavBar2 brand={['Inicio', 'Administración', 'Servicios', 'Inspecciones', 'Extintores', 'Página','Cerrar sesión']} />
+        <NavBar2 brand={['Inicio', 'Administración', 'Servicios', 'Inspecciones', 'Extintores','Reportes', 'Página','Cerrar sesión']} />
        
         {componente}
 

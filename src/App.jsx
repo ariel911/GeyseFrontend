@@ -11,12 +11,14 @@ import Rol from './components/administracion/rol';
 import Extintor from './components/extintor/extintor';
 import Inspeccion from './components/inspeccion/inspeccion';
 import Servicio from './components/servicios/servicio';
+import Reportes from './components/reportes/reportes';
 import ExportExcel from './components/export/export';
 import Pagina from './pages/pagina/pagina';
 import VisorQr from './pages/visorQr/visorQr';
 import LoginVisor from './pages/visorQr/loginVisor';
 
-import { PAGINA, LOGIN, HOME_INICIO, HOME_USUARIO, HOME_ROL, HOME_CLIENTE, HOME_SUCURSAL, HOME_EXTINTOR, HOME_INSPECCION, HOME_SERVICIO } from './routes/path';
+
+import { PAGINA, LOGIN, HOME_INICIO, HOME_USUARIO, HOME_ROL, HOME_CLIENTE, HOME_SUCURSAL, HOME_EXTINTOR, HOME_INSPECCION, HOME_SERVICIO, HOME_REPORTES} from './routes/path';
 import ProtectedRoutesCliente from './routes/protectedRoutesCliente';
 
 function App() {
@@ -48,6 +50,7 @@ function App() {
             <Route path={HOME_EXTINTOR} element={<div className='contenedor2'><Home componente={<Extintor />} /> </div>} />
             <Route path={HOME_INSPECCION} element={<div className='contenedor2'><Home componente={<Inspeccion />} /> </div>} />
             <Route path={HOME_SERVICIO} element={<div className='contenedor2'><Home componente={<Servicio />} /> </div>} />
+            <Route path={HOME_REPORTES} element={<div className='contenedor2'><Home componente={<Reportes />} /> </div>} />
             {/*          <Route path={HOME_GENERADOR} element={<div className='contenedor2'><Home componente={<Qr />} /> </div>} /> */}
           </Route>
           <Route path='*' element={<Navigate to={PAGINA} />} />

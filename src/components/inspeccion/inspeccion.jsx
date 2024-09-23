@@ -4,17 +4,14 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
 
 const inspeccion = () => {
 
     const [selectedUser, setSelectedUser] = useState(null);
-    const animatedComponents = makeAnimated();
     const [inspecciones, setinspecciones] = useState([]);
     const [estados, setestados] = useState([]);
     const [selectedEstado, setselectedEstado] = useState(null);
     const [selectedExtintor, setselectedExtintor] = useState(null);
-
     const [extintor, setextintor] = useState([]);
     const [observaciones, setobservaciones] = useState('');
     const [fecha_inspeccion, setfecha_inspeccion] = useState('');
@@ -47,12 +44,7 @@ const inspeccion = () => {
 
     useEffect(() => {
         if (selectedUser) {
-            document.getElementById('fecha_inspeccion2').value = selectedUser.fecha_inspeccion || '';
             document.getElementById('observacion2').value = selectedUser.observaciones || '';
-            /*             document.getElementById('nombreEstudiante').defaultValue = '';
-                        document.getElementById('capacidad').defaultValue = '';
-                        document.getElementById('sucursal').defaultValue = '';
-                        document.getElementById('cliente').defaultValue = ''; */
         }
         handleGetinspecciones();
         handleGetestados();
@@ -96,18 +88,8 @@ const inspeccion = () => {
     //editar
 
     const handleEditUser = (user) => {
-        document.getElementById('fecha_inspeccion2').defaultValue = '';
         document.getElementById('observacion2').defaultValue = '';
-        /*         document.getElementById('nombreEstudiante').defaultValue ='';
-                document.getElementById('capacidad').defaultValue ='';
-                document.getElementById('sucursal').defaultValue ='';
-                document.getElementById('cliente').defaultValue =''; */
         setSelectedUser(user)
-
-        setSelectedUser(prevState => ({
-            ...prevState,
-            fecha_inspeccion: user.fecha_inspeccion.slice(0, 16)
-        }));
         setEditSelectedEstado(user.inspeccion_estados.map(inspeccionEstado => ({
             value: inspeccionEstado?.estado?.id,
             label: inspeccionEstado?.estado?.nombre_estado
@@ -203,7 +185,6 @@ const inspeccion = () => {
                     Authorization: `Bearer ${token}`,
                 },
                 data: {
-                    fecha_inspeccion: document.getElementById('fecha_inspeccion2').value,
                     observaciones: document.getElementById('observacion2').value,
                     extintorId: selectedExtintor?.value,
                     estados: valuesArray
@@ -259,7 +240,7 @@ const inspeccion = () => {
 
             setfecha_inspeccion('');
             setobservaciones('');
-            setSelectedOption(null)
+            setSelectedOption([])
             setselectedEstado([])
             handleGetinspecciones();
             // Llamar a la función del padre para actualizar la lista de inspecciones
@@ -298,8 +279,8 @@ const inspeccion = () => {
     const handleSelectChange = (selectedOption) => {
         setSelectedOption(selectedOption)
     };
-    const filteredOptions = options.filter((autor) =>
-        (autor.label + "").includes(selectedOption)
+    const filteredOptions = options.filter((option) =>
+        (option.label + '').includes(selectedOption)
     );
 
 
@@ -312,13 +293,7 @@ const inspeccion = () => {
         label: estado.nombre_estado
     }));
     const handleShowServicio = (user) => {
-
         setSelectedUser(user)
-
-        setSelectedUser(prevState => ({
-            ...prevState,
-            fecha_inspeccion: user.fecha_inspeccion.slice(0, 16)
-        }));
 
     };
     function getTrabajosNombres(servicioTrabajos) {
@@ -408,10 +383,7 @@ const inspeccion = () => {
                     <div className='nuevaInspeccion d-flex'>
                         <form onSubmit={handleSubmit} className="justify-content-center align-self-center">
                             <div className='row row-cols-2 row-cols-md-3 row-cols-lg-4'>
-                                <div className='mb-4 col'>
-                                    <label htmlFor="recipient-name" className="form-label">Fecha Insp.</label>
-                                    <input type="datetime-local" className="form-control" value={fecha_inspeccion} onChange={(e) => setfecha_inspeccion(e.target.value)} required />
-                                </div>
+                                
                                 <div className=' col'>
                                     <label htmlFor="recipient-name" className="form-label ">Cod. Empresa</label>
                                     <Select
@@ -544,7 +516,7 @@ const inspeccion = () => {
                                         </div>
                                         <div className="mb-3 col-6">
                                             <label htmlFor="ubicacion" className="col-form-label">Fecha Inspección</label>
-                                            <input type="datetime-local" className="form-control" id="fecha_servicio3" name="ubicacion" defaultValue={selectedUser?.fecha_inspeccion} readOnly />
+                                            <input type="datetime-local" className="form-control" id="fecha_servicio3" name="ubicacion" defaultValue={selectedUser?.fecha_inspeccion.slice(0,16)} readOnly />
                                         </div>
                                     </div>
 
@@ -594,12 +566,6 @@ const inspeccion = () => {
                             </div>
                             <div className="modal-body">
                                 <form >
-
-                                    <div className='mb-3 col'>
-                                        <label htmlFor="fecha_inspeccion" className="form-label">Fecha Inspección</label>
-                                        <input type="datetime-local" className="form-control" id="fecha_inspeccion2" name="fecha_inspeccion" defaultValue={selectedUser?.fecha_inspeccion?.slice(0, 16)} required />
-                                    </div>
-
                                     <div className="mb-3">
                                         <label htmlFor="ubicacion" className="col-form-label">Ubicación</label>
                                         <input type="text" className="form-control" id="ubicacion2" name="ubicacion" defaultValue={selectedUser?.extintor.ubicacion} required disabled />

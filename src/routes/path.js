@@ -14,6 +14,7 @@ export const HOME_NOTIFICACION = '/home/notificacion';
 export const HOME_SUCURSAL = '/home/sucursal';
 export const HOME_EXTINTOR = '/home/extintor';
 export const HOME_INSPECCION = '/home/inspeccion';
+export const HOME_REPORTES = '/home/reportes';
 /* export const HOME_GENERADOR = '/extintores/:extintorId'; */
 export const PAGINA = '/pagina';
 

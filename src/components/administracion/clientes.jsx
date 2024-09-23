@@ -7,23 +7,18 @@ import swal from 'sweetalert';
 const cliente = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedRole, setSelectedRole] = useState(null);
   const [clientes, setclientes] = useState([]);
-  const [roles, setRoles] = useState([]);
   const [nombre_cliente, setNombrecliente] = useState('');
   const [usuario_acceso, setusuario_acceso] = useState('');
   const [codigo, setCodigo] = useState('');
   const [nombre_encargado, setnombre_encargado] = useState('');
-  const [rol, setRol] = useState(0);
   const [fecha_registro, setfecha_registro] = useState('');
   const [clave, setClave] = useState('');
-
   const [searchTerm, setSearchTerm] = useState('');
   const token = localStorage.getItem('token');
 
   useEffect(() => {
     handleGetUsers();
-    handleGetRoles();
     // Función para obtener la fecha y hora actual en el formato correcto
     const getCurrentDateTime = () => {
       const now = new Date();
@@ -44,7 +39,6 @@ const cliente = () => {
     if (selectedUser) {
       document.getElementById('nombre2').value = selectedUser.nombre_cliente || '';
       document.getElementById('nombre_encargado2').value = selectedUser.nombre_encargado || '';
-      document.getElementById('fecha_registro2').value = selectedUser.fecha_registro || '';
       document.getElementById('clave2').value = selectedUser.clave || '';
       document.getElementById('usuario_acceso2').value = selectedUser.usuario_acceso || '';
       document.getElementById('codigo2').value = selectedUser.codigo || '';
@@ -66,32 +60,17 @@ const cliente = () => {
     });
     setclientes(res.data.data.clientes);
   };
-  const handleGetRoles = async () => {
-    const res = await axios({
-      url: "https://backendgeyse.onrender.com/api/rol",
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setRoles(res.data.data.rol);
-  };
+
 
   //editar
 
   const handleEditUser = (user) => {
     document.getElementById('nombre2').defaultValue = '';
     document.getElementById('nombre_encargado2').defaultValue = '';
-    document.getElementById('fecha_registro2').defaultValue = '';
     document.getElementById('clave2').defaultValue = '';
     document.getElementById('usuario_acceso2').defaultValue = '';
     document.getElementById('codigo2').defaultValue = '';
     setSelectedUser(user)
-
-    setSelectedUser(prevState => ({
-      ...prevState,
-      fecha_registro: user.fecha_registro.slice(0, 16)
-    }));
 
   };
   const handleDarEliminar = async (cliente) => {
@@ -175,7 +154,6 @@ const cliente = () => {
         data: {
           nombre_cliente: document.getElementById('nombre2').value,
           nombre_encargado: document.getElementById('nombre_encargado2').value,
-          fecha_registro: document.getElementById('fecha_registro2').value,
           clave: document.getElementById('clave2').value,
           usuario_acceso: document.getElementById('usuario_acceso2').value,
           codigo: document.getElementById('codigo2').value
@@ -227,9 +205,7 @@ const cliente = () => {
       setfecha_registro('');
       setusuario_acceso('');
       setCodigo('');
-      setSelectedRole(null)
       setClave('');
-      setRol(0);
       handleGetUsers();
       // Llamar a la función del padre para actualizar la lista de clientes
       swal({
@@ -282,10 +258,6 @@ const cliente = () => {
                 <div className="mb-3 col">
                   <label htmlFor="nombre_encargado" className="form-label">Encargado</label>
                   <input type="text" className="form-control" id="nombre_encargado" value={nombre_encargado} onChange={(e) => setnombre_encargado(e.target.value)} required />
-                </div>
-                <div className='mb-3 col'>
-                  <label htmlFor="recipient-name" className="form-label">Fecha Registro</label>
-                  <input type="datetime-local" className="form-control" value={fecha_registro} onChange={(e) => setfecha_registro(e.target.value)} required />
                 </div>
                 <div className="mb-3 col">
                   <label htmlFor="usuario_acceso" className="form-label">Usuario</label>
@@ -417,10 +389,6 @@ const cliente = () => {
                 <div className="mb-3">
                   <label htmlFor="codigo" className="col-form-label">Codigo</label>
                   <input type="text" className="form-control" id="codigo2" name="codigo" defaultValue={selectedUser?.codigo} required />
-                </div>
-                <div className='mb-3 col'>
-                  <label htmlFor="fecha_registro" className="form-label">Fecha Registro</label>
-                  <input type="datetime-local" className="form-control" id="fecha_registro2" name="fecha_registro" defaultValue={selectedUser?.fecha_registro?.slice(0, 16)} required />
                 </div>
                 <div className="mb-3">
                   <label htmlFor="nombre_encargado" className="col-form-label">Nombre encargado</label>

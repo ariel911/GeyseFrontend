@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { faUser, faGlobe, faClipboard, faAngleDown, faXmark, faFireExtinguisher, faFireFlameSimple } from '@fortawesome/free-solid-svg-icons';
 
-import { PAGINA, HOME_ROL, HOME_USUARIO, HOME_CLIENTE, HOME_SUCURSAL, HOME_EXTINTOR, HOME_INSPECCION, HOME_SERVICIO } from '../../routes/path';
+import { PAGINA, HOME_ROL, HOME_USUARIO, HOME_CLIENTE, HOME_SUCURSAL, HOME_EXTINTOR, HOME_INSPECCION, HOME_SERVICIO, HOME_REPORTES } from '../../routes/path';
 
 const NavBar = ({ brand }) => {
     const nombre = localStorage.getItem('nombre');
@@ -94,7 +94,7 @@ const NavBar = ({ brand }) => {
                         </Link>
                     </li>
                 )}
-                {(menuPermissions.includes('Todo') || menuPermissions.includes('inspeccion')) && (
+                {(menuPermissions.includes('Todo') || menuPermissions.includes('Inspecciones')) && (
                     <li className='elemento elemento3' onClick={handleMenuClick}>
                         <Link to={HOME_INSPECCION} className='text'>
                             <div className='div1'>
@@ -104,13 +104,23 @@ const NavBar = ({ brand }) => {
                         </Link>
                     </li>
                 )}
+                {(menuPermissions.includes('Todo') || menuPermissions.includes('Reportes'))&& (
+                    <li className='elemento elemento3' onClick={handleMenuClick}>
+                        <Link to={HOME_REPORTES} className='text'>
+                            <div className='div1'>
+                                <FontAwesomeIcon className='icono' icon={faClipboard} style={{ "--fa-primary-color": "#ffffff", "--fa-secondary-color": "#b0b0b0" }} />
+                            </div>
+                            <p>{brand[5]}</p>
+                        </Link>
+                    </li>
+                )}
 
                 <li className='elemento' onClick={handleMenuClick}>
                     <Link to={PAGINA} className='text'>
                         <div className='div1'>
                             <FontAwesomeIcon className='icono' icon={faGlobe} style={{ "--fa-primary-color": "#ffffff", "--fa-secondary-color": "#b0b0b0" }} />
                         </div>
-                        <p>{brand[5]}</p>
+                        <p>{brand[6]}</p>
                     </Link>
                 </li>
 
@@ -119,7 +129,7 @@ const NavBar = ({ brand }) => {
                         <div className='div1'>
                             <FontAwesomeIcon className='icono' icon={faXmark} style={{ "--fa-primary-color": "#ffffff", "--fa-secondary-color": "#b0b0b0" }} />
                         </div>
-                        <p>{brand[6]}</p>
+                        <p>{brand[7]}</p>
                     </Link>
                 </li>
             </ul>

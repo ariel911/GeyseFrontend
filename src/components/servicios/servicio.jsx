@@ -46,12 +46,9 @@ const servicio = () => {
 
     useEffect(() => {
         if (selectedUser) {
-            document.getElementById('fecha_servicio2').value = selectedUser.fecha_servicio || '';
             document.getElementById('proximo_mantenimiento2').value = selectedUser.proximo_mantenimiento || '';
             document.getElementById('proximo_ph2').value = selectedUser.proximo_ph || '';
             document.getElementById('observacion2').value = selectedUser.observaciones || '';
-
-
         }
         handleGetservicios();
         handleGetestados();
@@ -98,17 +95,12 @@ const servicio = () => {
 
         setSelectedUser(user)
 
-        document.getElementById('fecha_servicio2').defaultValue = '';
         document.getElementById('proximo_mantenimiento2').defaultValue = '';
         document.getElementById('proximo_ph2').defaultValue = '';
         document.getElementById('observacion2').defaultValue = '';
         document.getElementById('sucursal2').defaultValue = '';
         document.getElementById('cliente2').defaultValue = '';
 
-        setSelectedUser(prevState => ({
-            ...prevState,
-            fecha_servicio: user.fecha_servicio.slice(0, 16)
-        }));
         setSelectedUser(prevState => ({
             ...prevState,
             proximo_mantenimiento: user.proximo_mantenimiento.slice(0, 16)
@@ -211,7 +203,7 @@ const servicio = () => {
                     Authorization: `Bearer ${token}`,
                 },
                 data: {
-                    fecha_servicio: document.getElementById('fecha_servicio2').value,
+
                     proximo_ph: document.getElementById('proximo_ph2').value,
                     proximo_mantenimiento: document.getElementById('proximo_mantenimiento2').value,
                     observaciones: document.getElementById('observacion2').value,
@@ -311,8 +303,8 @@ const servicio = () => {
     const handleSelectChange = (selectedOption) => {
         setSelectedOption(selectedOption)
     };
-    const filteredOptions = options?.filter((autor) =>
-        (autor.label + "").includes(selectedOption)
+    const filteredOptions = options?.filter((option) =>
+        (option.label + "").includes(selectedOption)
     );
 
 
@@ -335,14 +327,7 @@ const servicio = () => {
     }));
 
     const handleShowServicio = (user) => {
-
         setSelectedUser(user)
-
-        setSelectedUser(prevState => ({
-            ...prevState,
-            fecha_servicio: user.fecha_servicio.slice(0, 16)
-        }));
-
     };
 
     const handleActionChange = (event, servicio) => {
@@ -414,29 +399,21 @@ const servicio = () => {
                         <form onSubmit={handleSubmit} className="justify-content-center align-self-center">
                             <div className='row row-cols-2 row-cols-md-3 row-cols-lg-4'>
 
-                                <div className='mb-3 col'>
-                                    <label htmlFor="recipient-name" className="form-label">Fecha servicio</label>
-                                    <input type="datetime-local" className="form-control" value={fecha_servicio} onChange={(e) => setfecha_servicio(e.target.value)} required />
-                                </div>
+
                                 <div className='mb-3 colct'>
-                                    <label htmlFor="recipient-name" className="form-label ">Cod. Empresa</label>
+                                    <label htmlFor="recipient-name" className="form-label ">Código Empresa</label>
                                     <Select
                                         options={filteredOptions}
                                         onChange={handleSelectChange}
                                         isSearchable
-                                        placeholder="Buscar"
+                                        placeholder="Buscar Extintor"
                                         value={selectedOption}
                                         className=""
                                     />
                                 </div>
-
-                                <div className='mb-3 col'>
-                                    <label htmlFor="recipient-name" className="form-label">Prox. PH</label>
-                                    <input type="datetime-local" className="form-control" value={proximo_ph} onChange={(e) => setproximo_ph(e.target.value)} required />
-                                </div>
-                                <div className='mb-3 col'>
-                                    <label htmlFor="recipient-name" className="form-label">Prox. Mant.</label>
-                                    <input type="datetime-local" className="form-control" value={proximo_mantenimiento} onChange={(e) => setproximo_mantenimiento(e.target.value)} required />
+                                <div className="mb-3 col">
+                                    <label htmlFor="recipient-name" className="form-label">Sucursal</label>
+                                    <input type="sucursal" className="form-control" id="sucursal" defaultValue={selectedOption?.sucursal} disabled />
                                 </div>
                                 <div className="mb-3 col">
                                     <label htmlFor="recipient-name" className="form-label">Marca</label>
@@ -446,10 +423,16 @@ const servicio = () => {
                                     <label htmlFor="recipient-name" className="form-label">Capacidad</label>
                                     <input type="capacidad" className="form-control" id="capacidad" defaultValue={selectedOption?.capacidad} disabled />
                                 </div>
-                                <div className="mb-3 col">
-                                    <label htmlFor="recipient-name" className="form-label">Sucursal</label>
-                                    <input type="sucursal" className="form-control" id="sucursal" defaultValue={selectedOption?.sucursal} disabled />
+
+                                <div className='mb-3 col'>
+                                    <label htmlFor="recipient-name" className="form-label">Próximo PH</label>
+                                    <input type="datetime-local" className="form-control" value={proximo_ph} onChange={(e) => setproximo_ph(e.target.value)} required />
                                 </div>
+                                <div className='mb-3 col'>
+                                    <label htmlFor="recipient-name" className="form-label">Próximo  Mtto.</label>
+                                    <input type="datetime-local" className="form-control" value={proximo_mantenimiento} onChange={(e) => setproximo_mantenimiento(e.target.value)} required />
+                                </div>
+
 
                                 <div className="mb-3 col">
                                     <label htmlFor="observaciones" className="form-label">Observaciones</label>
@@ -492,10 +475,7 @@ const servicio = () => {
                             <div className="modal-body">
                                 <form >
                                     <div className="row">
-                                        <div className='mb-3 col'>
-                                            <label htmlFor="fecha_servicio" className="form-label">Fecha servicio</label>
-                                            <input type="datetime-local" className="form-control" id="fecha_servicio2" name="fecha_servicio" defaultValue={selectedUser?.fecha_servicio?.slice(0, 16)} required />
-                                        </div>
+
                                         <div className="mb-3 col">
                                             <label htmlFor="codigo_empresa" className="form-label">Cod. extintor</label>
                                             <input type="text" className="form-control" id="codigo_empresa2" name="codigo_empresa" defaultValue={selectedUser?.extintor.codigo_empresa} required disabled />
@@ -584,7 +564,7 @@ const servicio = () => {
                                         </div>
                                         <div className="mb-3 col-6">
                                             <label htmlFor="ubicacion" className="col-form-label">Fecha Servicio:</label>
-                                            <input type="datetime-local" className="form-control" id="fecha_servicio2" name="ubicacion" defaultValue={selectedUser?.fecha_servicio} disabled />
+                                            <input type="datetime-local" className="form-control" id="fecha_servicio2" name="ubicacion" defaultValue={selectedUser?.fecha_servicio?.slice(0, 16)} disabled />
                                         </div>
                                     </div>
                                     <div className="row">
@@ -653,11 +633,13 @@ const servicio = () => {
                                     <tr>
                                         <th scope="col">Nº</th>
                                         <th scope="col">Cod. Empresa</th>
+                                        <th scope="col">Cod. Exintor</th>
                                         <th scope="col">Sucursal</th>
                                         <th scope="col">Marca</th>
                                         <th scope="col">Capacidad</th>
                                         <th scope="col">Ubicación</th>
                                         <th scope="col">Trabajos</th>
+                                        <th scope="col">Fecha Servicio</th>
                                         <th scope="col">Observaciones</th>
                                         <th scope="col">Acción</th>
                                     </tr>
@@ -669,6 +651,7 @@ const servicio = () => {
                                             <tr key={servicio.id}>
                                                 <td>{index + 1}</td>
                                                 <td>{servicio.extintor.codigo_empresa}</td>
+                                                <td>{servicio.extintor.codigo_extintor}</td>
                                                 <td>{servicio.extintor.sucursal.nombre_sucursal}</td>
                                                 <td>{servicio.extintor.marca}</td>
                                                 <td>{servicio.extintor.capacidad}</td>
@@ -680,6 +663,7 @@ const servicio = () => {
                                                             .join(', ')
                                                         : 'No se hizo trabajos'}
                                                 </td>
+                                                <td>{servicio.fecha_servicio.slice(0, 10)}</td>
                                                 <td>{servicio.observaciones}</td>
                                                 <td className="accion">
                                                     <select className='form-select' onChange={(e) => handleActionChange(e, servicio)} id={`select-${servicio.id}`}>

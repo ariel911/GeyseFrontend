@@ -47,7 +47,6 @@ const Usuario = () => {
       document.getElementById('nombre2').value = selectedUser.nombre_usuario || '';
       document.getElementById('apellido2').value = selectedUser.apellido || '';
       document.getElementById('correo2').value = selectedUser.correo || '';
-      document.getElementById('fecha_registro2').value = selectedUser.fecha_registro || '';
     }
     handleGetUsers();
 
@@ -83,7 +82,7 @@ const Usuario = () => {
     document.getElementById('nombre2').defaultValue = '';
     document.getElementById('apellido2').defaultValue = '';
     document.getElementById('correo2').defaultValue = '';
-    document.getElementById('fecha_registro2').defaultValue = '';
+
 
     setSelectedUser(user)
 
@@ -91,10 +90,6 @@ const Usuario = () => {
       value: user.rol.id,
       label: user.rol.nombre_rol
     });
-    setSelectedUser(prevState => ({
-      ...prevState,
-      fecha_registro: user.fecha_registro.slice(0, 16)
-    }));
 
   };
 
@@ -169,13 +164,6 @@ const Usuario = () => {
   }
   const handleUpdateUser = async (e) => {
     e.preventDefault();
-    console.log("nombre", selectedRole2?.label)
-    console.log("nombre", selectedUser.rol)
-    console.log("n1", document.getElementById('nombre2').value)
-    console.log("n", document.getElementById('apellido2').value)
-    console.log("n", document.getElementById('fecha_registro2').value)
-    console.log("n", document.getElementById('correo2').value)
-
     await axios({
       url: `https://backendgeyse.onrender.com/api/usuarios/${selectedUser.id}`,
       method: "PUT",
@@ -185,7 +173,7 @@ const Usuario = () => {
       data: {
         nombre_usuario: document.getElementById('nombre2').value,
         apellido: document.getElementById('apellido2').value,
-        fecha_registro: document.getElementById('fecha_registro2').value,
+        fecha_registro: fecha_registro,
         correo: document.getElementById('correo2').value,
         rolId: selectedRole2?.value,
       }
@@ -198,9 +186,9 @@ const Usuario = () => {
     const updatedUsuarios = usuarios.map((usuario) =>
       usuario.id === selectedUser.id ? { ...usuario, ...selectedUser, rol: { ...selectedUser.rol, nombre_rol: selectedRole2.label } } : usuario
     );
-    console.log("usuarios:", usuarios)
+    
     setUsuarios(updatedUsuarios);
-    console.log("usuariosDespues:", usuarios)
+  
     // Close the modal
     setSelectedUser(null);
     setSelectedRole2(null);
@@ -341,10 +329,6 @@ const Usuario = () => {
                   <input type="text" className="form-control" id="apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} required />
                 </div>
                 <div className="mb-3 col">
-                  <label htmlFor="recipient-name" className="form-label">Fecha Registro</label>
-                  <input type="datetime-local" className="form-control" value={fecha_registro} onChange={(e) => setFechaRegistro(e.target.value)} required />
-                </div>
-                <div className="mb-3 col">
                   <label htmlFor="correo" className="form-label">Correo</label>
                   <input type="email" className="form-control" id="correo" value={correo} onChange={(e) => setCorreo(e.target.value)} required />
                 </div>
@@ -420,10 +404,7 @@ const Usuario = () => {
 
                     <input type="text" className="form-control" id="nombre2" name="nombre" defaultValue={selectedUser?.nombre_usuario} required />
                   </div>
-                  <div className='mb-3 col'>
-                    <label htmlFor="fecha_registro" className="form-label">Fecha Registro</label>
-                    <input type="datetime-local" className="form-control" id="fecha_registro2" name="fecha_registro" defaultValue={selectedUser?.fecha_registro?.slice(0, 16)} required />
-                  </div>
+                
                   <div className="mb-3">
                     <label htmlFor="apellido" className="col-form-label">Apellido:</label>
 

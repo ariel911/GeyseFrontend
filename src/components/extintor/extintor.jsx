@@ -17,20 +17,16 @@ const extintor = () => {
     const [selectedtipo2, setSelectedtipo2] = useState(null);
     const [extintores, setextintores] = useState([]);
     const qrRef = useRef(null);
-    const [isQRVisible, setIsQRVisible] = useState(false);
     const [marca, setMarca] = useState('');
     const [codigo_extintor, setcodigo_extintor] = useState('');
     const [codigo_empresa, setcodigo_empresa] = useState('');
     const [capacidad, setcapacidad] = useState('');
     const [sucursales, setsucursales] = useState(null);
     const [tipo, setTipo] = useState(null);
-
-    
     const [ubicacion, setubicacion] = useState('');
     const [observaciones, setobservaciones] = useState('');
     const [fecha_registro, setfecha_registro] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-
     const token = localStorage.getItem('token');
     const usuario_Id = localStorage.getItem('id');
 
@@ -60,7 +56,6 @@ const extintor = () => {
             document.getElementById('marca2').value = selectedUser.marca || '';
             document.getElementById('ubicacion2').value = selectedUser.ubicacion || '';
             document.getElementById('capacidad2').value = selectedUser.capacidad || '';
-            document.getElementById('fecha_registro2').value = selectedUser.fecha_registro || '';
             document.getElementById('codigo_extintor2').value = selectedUser.codigo_extintor || '';
             document.getElementById('codigo_empresa2').value = selectedUser.codigo_empresa || '';
             document.getElementById('observacion2').value = selectedUser.observaciones || '';
@@ -108,25 +103,15 @@ const extintor = () => {
     //editar
 
     const handleEditUser = (user) => {
-
         setSelectedUser(user)
-
-        console.log("servicioss:", selectedUser)
-
-
         document.getElementById('marca2').defaultValue = '';
         document.getElementById('capacidad2').defaultValue = '';
         document.getElementById('ubicacion2').defaultValue = '';
-        document.getElementById('fecha_registro2').defaultValue = '';
         document.getElementById('codigo_extintor2').defaultValue = '';
         document.getElementById('codigo_empresa2').defaultValue = '';
         document.getElementById('observacion2').defaultValue = '';
 
         handleGetTipos();
-        setSelectedUser(prevState => ({
-            ...prevState,
-            fecha_registro: user.fecha_registro.slice(0, 16)
-        }));
 
 
         if (user.tipo.nombre_tipo) {
@@ -242,7 +227,6 @@ const extintor = () => {
                 data: {
                     marca: document.getElementById('marca2').value,
                     capacidad: document.getElementById('capacidad2').value,
-                    fecha_registro: document.getElementById('fecha_registro2').value,
                     ubicacion: document.getElementById('ubicacion2').value,
                     codigo_extintor: document.getElementById('codigo_extintor2').value,
                     codigo_empresa: document.getElementById('codigo_empresa2').value,
@@ -390,8 +374,6 @@ const extintor = () => {
 
     const handleDescargarQr = (codigoEmpresa) => {
 
-
-        setIsQRVisible(true);
         setTimeout(handleDownload(codigoEmpresa), 100); // Espera un momento para asegurar que el QR se renderice antes de descargar
         /* document.getElementById(`select-`).value = ""; */
     }
@@ -403,13 +385,10 @@ const extintor = () => {
         extintor?.codigo_empresa?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     const handleDownload = (codigoEmpresa) => {
-        setIsQRVisible(true);
-
         setTimeout(() => {
             if (qrRef.current === null) {
                 return;
             }
-
 
             toPng(qrRef.current)
                 .then((dataUrl) => {
@@ -417,13 +396,10 @@ const extintor = () => {
 
                     link.download = `${codigoEmpresa}.png`;
                     link.href = dataUrl;
-
                     link.click();
-                    setIsQRVisible(false);
                 })
                 .catch((err) => {
                     console.error('Oops, something went wrong!', err);
-                    setIsQRVisible(false);
                 });
         }, 0);
     };
@@ -455,10 +431,7 @@ const extintor = () => {
                                     <label htmlFor="capacidad" className="form-label">Capacidad</label>
                                     <input type="text" className="form-control" id="capacidad" value={capacidad} onChange={(e) => setcapacidad(e.target.value)} required />
                                 </div>
-                                <div className='mb-3 col'>
-                                    <label htmlFor="recipient-name" className="form-label">Fecha Registro</label>
-                                    <input type="datetime-local" className="form-control" value={fecha_registro} onChange={(e) => setfecha_registro(e.target.value)} required />
-                                </div>
+                               
                                 <div className="mb-3 col">
                                     <label htmlFor="ubicacion" className="form-label">Ubicación</label>
                                     <input type="text" className="form-control" id="ubicacion" value={ubicacion} onChange={(e) => setubicacion(e.target.value)} required />
@@ -675,10 +648,7 @@ const extintor = () => {
                                             <input type="text" className="form-control" id="codigo_empresa2" name="codigo_empresa" defaultValue={selectedUser?.codigo_empresa} required />
                                         </div>
                                     </div>
-                                    <div className='mb-3 col'>
-                                        <label htmlFor="fecha_registro" className="form-label">Fecha Registro</label>
-                                        <input type="datetime-local" className="form-control" id="fecha_registro2" name="fecha_registro" defaultValue={selectedUser?.fecha_registro?.slice(0, 16)} required />
-                                    </div>
+                                    
                                     <div className="mb-3">
                                         <label htmlFor="ubicacion" className="col-form-label">Ubicación</label>
                                         <input type="text" className="form-control" id="ubicacion2" name="ubicacion" defaultValue={selectedUser?.ubicacion} required />
@@ -733,8 +703,6 @@ const extintor = () => {
 
                                 <div className="extintor-card">
                                     <div ref={qrRef} style={{ position: 'relative', display: 'inline-block' }}>
-
-                                        {/* <QRCode value={https://geyseproyect.netlify.app/pagina/extintoresQr/${extintor?.id}} size={156} /> */}
                                         <QRCode value={codigoEmpresa} id="qr-descargar" size={256} />
                                     </div>
                                     <button className='btn btn-primary mt-3' onClick={() => handleDescargarQr(codigoEmpresa)}>descargar Qr</button>
@@ -762,8 +730,7 @@ const extintor = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {extintores
-                                    .filter(extintor => extintor.estado === 0 && extintor.sucursal.estado === 1 && extintor.sucursal.cliente.estado===1) // Filtrar extintores con estado 0
+                                {extintores?.filter(extintor => extintor.estado === 0 && extintor.sucursal.estado === 1 && extintor.sucursal.cliente.estado===1) // Filtrar extintores con estado 0
                                     .map((extintor, index) => (
                                         <tr key={extintor.id}>
                                             <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}

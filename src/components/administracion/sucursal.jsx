@@ -44,7 +44,6 @@ const sucursal = () => {
             document.getElementById('nombre2').value = selectedUser.nombre_sucursal || '';
             document.getElementById('nombre_encargado2').value = selectedUser.nombre_encargado || '';
             document.getElementById('ubicacion2').value = selectedUser.ubicacion || '';
-            document.getElementById('fecha_registro2').value = selectedUser.fecha_registro || '';
             document.getElementById('codigo2').value = selectedUser.codigo || '';
 
         }
@@ -81,15 +80,9 @@ const sucursal = () => {
         document.getElementById('nombre2').defaultValue = '';
         document.getElementById('nombre_encargado2').defaultValue = '';
         document.getElementById('ubicacion2').defaultValue = '';
-        document.getElementById('fecha_registro2').defaultValue = '';
         document.getElementById('codigo2').defaultValue = '';
 
         setSelectedUser(user);
-
-        setSelectedUser(prevState => ({
-            ...prevState,
-            fecha_registro: user.fecha_registro.slice(0, 16)
-        }));
 
 
         // Verificar si user tiene clienteId definido y nombre_cliente
@@ -187,7 +180,6 @@ const sucursal = () => {
                 data: {
                     nombre_sucursal: document.getElementById('nombre2').value,
                     nombre_encargado: document.getElementById('nombre_encargado2').value,
-                    fecha_registro: document.getElementById('fecha_registro2').value,
                     ubicacion: document.getElementById('ubicacion2').value,
                     codigo: document.getElementById('codigo2').value,
                     clienteId: selectedClienteEdit.value
@@ -320,10 +312,6 @@ const sucursal = () => {
                                     <input type="text" className="form-control " id="nombre_encargado" value={nombre_encargado} onChange={(e) => setnombre_encargado(e.target.value)} required />
                                 </div>
                                 <div className="mb-3 col">
-                                    <label htmlFor="recipient-name" className="form-label">Fecha Registro</label>
-                                    <input type="datetime-local" className="form-control" value={fecha_registro} onChange={(e) => setfecha_registro(e.target.value)} required />
-                                </div>
-                                <div className="mb-3 col">
                                     <label htmlFor="ubicacion" className="form-label">Ubicación</label>
                                     <input type="text" className="form-control " id="ubicacion" value={ubicacion} onChange={(e) => setubicacion(e.target.value)} required />
                                 </div>
@@ -447,10 +435,6 @@ const sucursal = () => {
                                     <div className="mb-3">
                                         <label htmlFor="nombre" className="col-form-label">Nombre</label>
                                         <input type="text" className="form-control" id="nombre2" name="nombre" defaultValue={selectedUser?.nombre_sucursal} required />
-                                    </div>
-                                    <div className='mb-3 col'>
-                                        <label htmlFor="fecha_registro" className="form-label">Fecha Registro</label>
-                                        <input type="datetime-local" className="form-control" id="fecha_registro2" name="fecha_registro" defaultValue={selectedUser?.fecha_registro?.slice(0, 16)} required />
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="nombre_encargado" className="col-form-label">Nombre Encargado</label>
