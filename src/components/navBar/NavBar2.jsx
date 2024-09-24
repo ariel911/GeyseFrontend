@@ -53,7 +53,7 @@ const NavBar = ({ brand }) => {
 
     return (
         <nav className={`navegacion ${isMenuHidden ? 'menu-show' : 'menu-hidden'}`}>
-            <ul className='ul'>
+            <ul className='ul '>
                 {((menuPermissions.includes('Usuarios') || (menuPermissions.includes('Cargos')) || (menuPermissions.includes('Clientes')) || (menuPermissions.includes('Sucursales'))) || menuPermissions.includes('Todo')) && (
                     <li className='elemento elemento1'>
                         <label htmlFor="check" className='text barraSubMenu'>

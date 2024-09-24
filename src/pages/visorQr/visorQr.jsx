@@ -330,7 +330,6 @@ const QrScannerComponent = () => {
         e.preventDefault();
         // Realizar la solicitud para agregar el inspeccion
         const selectedEstados = selectedEstado.map((option) => option.value);
-        console.log('idExtintor:', extintor.id, fecha_inspeccion, observaciones, usuarioId, selectedEstados)
 
         try {
             const response = await axios.post(
@@ -351,7 +350,7 @@ const QrScannerComponent = () => {
             setfecha_inspeccion('');
             setobservaciones('');
             handleGetInspecciones();
-            setselectedEstado([])
+            setselectedEstado([]);
 
             swal({
                 title: "Inspeccion Agregado!",
@@ -599,10 +598,7 @@ const QrScannerComponent = () => {
 
                                 <form onSubmit={handleSubmit} className="justify-content-center align-self-center">
                                     <div className='row row-cols-2 row-cols-md-3 row-cols-lg-4'>
-                                        <div className='mb-4 col'>
-                                            <label htmlFor="recipient-name" className="form-label">Fecha Insp.</label>
-                                            <input type="datetime-local" className="form-control" value={fecha_inspeccion} onChange={(e) => setfecha_inspeccion(e.target.value)} required />
-                                        </div>
+                                        
                                         <div className="mb-3 col">
                                             <label htmlFor="rol" className="form-label ">Desperfectos</label>
                                             <Select

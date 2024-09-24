@@ -113,7 +113,7 @@ const Reportes = () => {
     // Función para generar y descargar el Excel
     const exportToExcel = (data, sheetName, columns) => {
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet(sheetName);
+        const worksheet = workbook.addWorksheet(    );
 
         // Aplicar los encabezados a las columnas
         worksheet.columns = columns;
@@ -606,6 +606,10 @@ const Reportes = () => {
                                     options={opcionesSucursal}
                                     isSearchable={true}
                                     placeholder="Selecciona una sucursal"
+                                    /* styles={{
+                                        menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                                        control: (provided) => ({ ...provided, zIndex: 1 }),
+                                    }} */
                                 />
                             </div>
 

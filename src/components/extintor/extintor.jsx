@@ -496,7 +496,7 @@ const extintor = () => {
 
                     <div className="table table-responsive tablaExtintor">
                         <table className="table table-sm">
-                            <thead className="table-dark">
+                            <thead className="table-dark fixed">
                                 <tr>
                                     <th scope="col">Nº</th>
                                     <th scope="col">Cod. Extintor</th>

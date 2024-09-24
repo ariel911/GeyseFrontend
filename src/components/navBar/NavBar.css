@@ -133,3 +133,7 @@ ul li ul {
 
 
 }
+.navegacion{
+    z-index: 1000; /* O un valor suficientemente alto */
+   /*  position: relative; */
+}
