@@ -21,6 +21,7 @@ const inspeccion = () => {
 
     const usuario_Id = localStorage.getItem('id');
     const token = localStorage.getItem('token');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         handleGetinspecciones();
@@ -209,7 +210,7 @@ const inspeccion = () => {
 
             // Opcional: Mostrar una notificación o mensaje de éxito
         } catch (error) {
-
+            console.log("error:", error)
         }
 
     };
@@ -217,7 +218,9 @@ const inspeccion = () => {
         e.preventDefault();
         // Realizar la solicitud para agregar el inspeccion
         const selectedEstados = selectedEstado.map((option) => option.value);
+        if (isSubmitting) return;
 
+        setIsSubmitting(true);
         try {
             const response = await axios.post(
                 'https://backendgeyse.onrender.com/api/inspeccion',
@@ -254,12 +257,15 @@ const inspeccion = () => {
             // Opcional: Mostrar una notificación o mensaje de éxito
         } catch (error) {
             // Opcional: Mostrar una notificación o mensaje de error
+            console.log("error:",error)
             swal({
                 title: "Fallo en Agregar!",
                 /* text: "Por favor, completa todos los campos requeridos", */
                 icon: "error",
                 button: "Ok",
             });
+        }finally {
+            setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
         }
     };
 
@@ -383,14 +389,14 @@ const inspeccion = () => {
                     <div className='nuevaInspeccion d-flex'>
                         <form onSubmit={handleSubmit} className="justify-content-center align-self-center">
                             <div className='row row-cols-2 row-cols-md-3 row-cols-lg-4'>
-                                
+
                                 <div className=' col'>
                                     <label htmlFor="recipient-name" className="form-label ">Cod. Empresa</label>
                                     <Select
                                         options={filteredOptions}
                                         onChange={handleSelectChange}
                                         isSearchable
-                                        placeholder="Buscar"
+                                        placeholder="Buscar Extintor"
                                         value={selectedOption}
                                         className=""
                                     />
@@ -430,7 +436,7 @@ const inspeccion = () => {
                             </div>
                             <div className=" mt-3 botones">
                                 <div className="">
-                                    <button type="submit" className="btn btn-primary botoninspeccion">Agregar</button>
+                                    <button type="submit" className="btn btn-primary botoninspeccion"  disabled={isSubmitting}>   {isSubmitting ? 'Guardando...' : 'Guardar Inspección'}</button>
                                 </div>
 
                             </div>
@@ -465,23 +471,23 @@ const inspeccion = () => {
                             </thead>
                             <tbody>
                                 {filteredInspecciones?.filter((inspeccion) => inspeccion.estado === 1 && inspeccion.extintor.estado === 1 && inspeccion.extintor.sucursal.estado === 1 && inspeccion.extintor.sucursal.cliente.estado === 1).map((inspeccion, index) => (
-                                        <tr key={inspeccion.id}>
-                                            <td>{index + 1}</td> {/* Número consecutivo basado en la lista filtrada */}
-                                            <td>{inspeccion.extintor.codigo_empresa}</td>
-                                            <td>{inspeccion.extintor.ubicacion}</td>
-                                            <td>{inspeccion.extintor.marca}</td>
-                                            <td>{inspeccion.extintor.capacidad}</td>
-                                            <td>{inspeccion.observaciones}</td>
-                                            <td className="accion">
-                                                <select className='form-select' onChange={(e) => handleActionChange(e, inspeccion)} id={`select-${inspeccion.id}`}>
-                                                    <option value="">Seleccionar</option>
-                                                    <option value="edit">Editar</option>
-                                                    <option value="baja">Baja</option>
-                                                    <option value="detalle">Detalle</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    <tr key={inspeccion.id}>
+                                        <td>{index + 1}</td> {/* Número consecutivo basado en la lista filtrada */}
+                                        <td>{inspeccion.extintor.codigo_empresa}</td>
+                                        <td>{inspeccion.extintor.ubicacion}</td>
+                                        <td>{inspeccion.extintor.marca}</td>
+                                        <td>{inspeccion.extintor.capacidad}</td>
+                                        <td>{inspeccion.observaciones}</td>
+                                        <td className="accion">
+                                            <select className='form-select' onChange={(e) => handleActionChange(e, inspeccion)} id={`select-${inspeccion.id}`}>
+                                                <option value="">Seleccionar</option>
+                                                <option value="edit">Editar</option>
+                                                <option value="baja">Baja</option>
+                                                <option value="detalle">Detalle</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
@@ -516,7 +522,7 @@ const inspeccion = () => {
                                         </div>
                                         <div className="mb-3 col-6">
                                             <label htmlFor="ubicacion" className="col-form-label">Fecha Inspección</label>
-                                            <input type="datetime-local" className="form-control" id="fecha_servicio3" name="ubicacion" defaultValue={selectedUser?.fecha_inspeccion.slice(0,16)} readOnly />
+                                            <input type="datetime-local" className="form-control" id="fecha_servicio3" name="ubicacion" defaultValue={selectedUser?.fecha_inspeccion.slice(0, 16)} readOnly />
                                         </div>
                                     </div>
 
@@ -639,7 +645,7 @@ const inspeccion = () => {
                                             <td>{inspeccion.fecha_inspeccion.slice(0, 10)}</td>
                                             <td>{inspeccion.extintor.ubicacion}</td>
                                             <td>{inspeccion.observaciones}</td>
-                                            <td>{inspeccion.inspeccion_estados.length > 0? inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', '): 'No se hizo trabajos'}</td>
+                                            <td>{inspeccion.inspeccion_estados.length > 0 ? inspeccion.inspeccion_estados.map(servicioEstado => servicioEstado.estado.nombre_estado).join(', ') : 'No se hizo trabajos'}</td>
                                             <td className="accion">
                                                 <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(inspeccion.id)}>Reintegrar</button>
                                                 <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(inspeccion.id)}>Eliminar</button>

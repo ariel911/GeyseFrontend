@@ -7,7 +7,6 @@ import "./rol.css"
 const Rol = () => {
     const [nombre_rol, setNombreRol] = useState('');
     const [rol, setRol] = useState([]);
-    const [menu, setMenu] = useState([]);
     const [menus, setMenus] = useState([]);
     const [selectedMenu, setSelectedMenu] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,6 +14,7 @@ const Rol = () => {
     const [editNombreRol, setEditNombreRol] = useState('');
     const [editSelectedMenu, setEditSelectedMenu] = useState([]);
     const token = localStorage.getItem('token');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         handleGetUsers();
@@ -43,6 +43,10 @@ const Rol = () => {
             });
             return;
         }
+        if (isSubmitting) return;
+
+        setIsSubmitting(true); // Desactivar el botón de envío
+        
 
         try {
             const response = await axios.post(
@@ -60,7 +64,6 @@ const Rol = () => {
             );
 
             setNombreRol('');
-            setMenu([]);
             setSelectedMenu([]);
 
             swal({
@@ -71,6 +74,8 @@ const Rol = () => {
             handleGetUsers();
         } catch (error) {
             console.error(error);
+        }finally {
+            setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
         }
     };
 
@@ -270,7 +275,7 @@ const Rol = () => {
                             </div>
                             <div className="botones mt-2">
                                 <div>
-                                    <button type="submit" className="btn btn-primary boton2">Agregar</button>
+                                    <button type="submit" className="btn btn-primary" disabled={isSubmitting}>{isSubmitting ? 'Guardando...' : 'Guardar Cargo'}</button>
                                 </div>
                             </div>
                         </form>

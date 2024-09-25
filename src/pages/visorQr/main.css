@@ -9,6 +9,9 @@ body {
     background-color: #f8f9fa;
 }
 
+.detallesp{
+    font-size: 15px;
+}
 /* Carousel */
 .carousel-inner img {
     height: 500px;

@@ -16,7 +16,7 @@ const sucursal = () => {
     const [fecha_registro, setfecha_registro] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedClienteEdit, setSelectedClienteEdit] = useState(null);
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -206,7 +206,9 @@ const sucursal = () => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
 
+        setIsSubmitting(true);
         // Realizar la solicitud para agregar el sucursal
         try {
             const response = await axios.post(
@@ -246,6 +248,9 @@ const sucursal = () => {
             // Opcional: Mostrar una notificación o mensaje de éxito
         } catch (error) {
             // Opcional: Mostrar una notificación o mensaje de error
+            console.error("Error al agregar sucursal:", error);
+        } finally {
+            setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
         }
     };
 
@@ -333,8 +338,8 @@ const sucursal = () => {
                             </div>
                             <div className="botones">
                                 <div className="">
-                                    <button type="submit" className="btn btn-primary botonsucursal">
-                                        Agregar
+                                    <button type="submit" className="btn btn-primary botonsucursal" disabled={isSubmitting}>
+                                        {isSubmitting ? 'Guardando...' : 'Guardar Sucursal'}
                                     </button>
                                 </div>
 

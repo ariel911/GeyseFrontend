@@ -27,7 +27,7 @@ const QrScannerComponent = () => {
     const [observaciones, setobservaciones] = useState('');
     const [estados, setestados] = useState([]);
     const [fecha_inspeccion, setfecha_inspeccion] = useState('');
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const usuarioId = localStorage.getItem('usuarioId');
     const token = localStorage.getItem('token2');
 
@@ -330,7 +330,9 @@ const QrScannerComponent = () => {
         e.preventDefault();
         // Realizar la solicitud para agregar el inspeccion
         const selectedEstados = selectedEstado.map((option) => option.value);
+        if (isSubmitting) return;
 
+        setIsSubmitting(true);
         try {
             const response = await axios.post(
                 'https://backendgeyse.onrender.com/api/inspeccion',
@@ -364,6 +366,8 @@ const QrScannerComponent = () => {
                 icon: "error",
                 button: "Ok",
             });
+        }finally {
+            setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
         }
     };
     const handleLogOut = () => {
@@ -427,8 +431,9 @@ const QrScannerComponent = () => {
             <div className="container mt-4">
                 <div className="card">
                     <div className="card-header containerh3">
-                        <h3>Detalles del Extintor</h3>
-                        <h3>{extintor?.codigo_extintor}</h3>
+                        <h4>Detalles del Extintor de {extintor?.sucursal?.nombre_sucursal}</h4>
+                        <p className='detallesp'>Código extintor empresa: {extintor?.codigo_empresa}</p>
+                        <p className='detallesp'>Código extintor: {extintor?.codigo_extintor}</p>
                         <button className="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#changePasswordModal" onClick={handleScanButtonClick}>
                             Escanear Qr
                         </button>
@@ -621,7 +626,7 @@ const QrScannerComponent = () => {
                                     </div>
                                     <div className=" mt-3 botones">
                                         <div className="">
-                                            <button type="submit" className="btn btn-primary botoninspeccion">Agregar</button>
+                                            <button type="submit" className="btn btn-primary botoninspeccion" disabled={isSubmitting}>{isSubmitting ? 'Guardando...' : 'Guardar Inspección'}</button>
                                         </div>
 
                                     </div>

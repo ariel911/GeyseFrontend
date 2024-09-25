@@ -29,7 +29,7 @@ const extintor = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const token = localStorage.getItem('token');
     const usuario_Id = localStorage.getItem('id');
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
         handleGetExtintores();
         handleGetTipos();
@@ -68,7 +68,10 @@ const extintor = () => {
     }, [selectedUser]);
 
     //actualizar todo eso
-
+    const isCodigoEmpresaDuplicated = (codigo_empresa) => {
+        // Revisar si el código de empresa ya está en la lista de extintores
+        return extintores.some(extintor => extintor.codigo_empresa === codigo_empresa);
+      };
 
     const handleGetExtintores = async () => {
         const res = await axios({
@@ -254,6 +257,7 @@ const extintor = () => {
             // Opcional: Mostrar una notificación o mensaje de éxito
         } catch (error) {
             // Opcional: Mostrar una notificación o mensaje de error
+            console.log("error:",error)
         }
 
     };
@@ -261,6 +265,17 @@ const extintor = () => {
         e.preventDefault();
 
         // Realizar la solicitud para agregar el extintor
+        if (isSubmitting) return;
+        if (isCodigoEmpresaDuplicated(codigo_empresa)) {
+            swal({
+                title: "Error",
+                text: "El código de empresa ya existe. Por favor, elige otro.",
+                icon: "warning",
+                button: "Ok",
+            });
+            return; // Detener la ejecución si hay un duplicado
+        }
+        setIsSubmitting(true);
         try {
             const response = await axios.post(
                 'https://backendgeyse.onrender.com/api/extintor',
@@ -306,6 +321,9 @@ const extintor = () => {
             // Opcional: Mostrar una notificación o mensaje de éxito
         } catch (error) {
             // Opcional: Mostrar una notificación o mensaje de error
+            console.log("error:",error)
+        } finally {
+            setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
         }
     };
 
@@ -473,8 +491,8 @@ const extintor = () => {
                             </div>
                             <div className="botones">
                                 <div className="">
-                                    <button type="submit" className="btn btn-primary botonextintor">
-                                        Agregar
+                                    <button type="submit" className="btn btn-primary botonextintor" disabled={isSubmitting}>
+                                    {isSubmitting ? 'Guardando...' : 'Guardar Extintor'}
                                     </button>
                                 </div>
 

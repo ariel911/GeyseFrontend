@@ -20,7 +20,7 @@ const Usuario = () => {
   const [clave, setClave] = useState('');
   const [nuevaClave, setNuevaClave] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -186,9 +186,9 @@ const Usuario = () => {
     const updatedUsuarios = usuarios.map((usuario) =>
       usuario.id === selectedUser.id ? { ...usuario, ...selectedUser, rol: { ...selectedUser.rol, nombre_rol: selectedRole2.label } } : usuario
     );
-    
+
     setUsuarios(updatedUsuarios);
-  
+
     // Close the modal
     setSelectedUser(null);
     setSelectedRole2(null);
@@ -203,7 +203,9 @@ const Usuario = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
+    setIsSubmitting(true);
     // Realizar la solicitud para agregar el usuario
     try {
       const response = await axios.post(
@@ -244,6 +246,9 @@ const Usuario = () => {
       // Opcional: Mostrar una notificación o mensaje de éxito
     } catch (error) {
       // Opcional: Mostrar una notificación o mensaje de error
+      console.log("error:", error)
+    } finally {
+      setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
     }
   };
 
@@ -254,7 +259,6 @@ const Usuario = () => {
 
   const handleChange2 = (selectedOption) => {
     setSelectedRole2(selectedOption);
-    console.log("user2", selectedOption)
   };
 
   const roleOptions = roles
@@ -273,12 +277,10 @@ const Usuario = () => {
   );
   const handleChangePassword = async (e) => {
     e.preventDefault();
-    console.log("claven:", nuevaClave)
-    console.log("usuario:", selectedUser.id)
     try {
       await axios({
         url: `https://backendgeyse.onrender.com/api/usuarios/cambiar-contrasena/${selectedUser.id}`,
-        method:"PUT",
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -350,7 +352,7 @@ const Usuario = () => {
               </div>
               <div className="botones">
                 <div>
-                  <button type="submit" className="btn btn-primary botonUsuario">Agregar</button>
+                  <button type="submit" className="btn btn-primary botonUsuario" disabled={isSubmitting}>{isSubmitting ? 'Guardando...' : 'Guardar Usuario'}</button>
                 </div>
               </div>
             </form>
@@ -404,7 +406,7 @@ const Usuario = () => {
 
                     <input type="text" className="form-control" id="nombre2" name="nombre" defaultValue={selectedUser?.nombre_usuario} required />
                   </div>
-                
+
                   <div className="mb-3">
                     <label htmlFor="apellido" className="col-form-label">Apellido:</label>
 
@@ -477,7 +479,7 @@ const Usuario = () => {
                         <td>{usuario.correo}</td>
                         <td>{usuario.fecha_registro.slice(0, 10)}</td>
                         <td>{usuario?.rol?.nombre_rol}</td>
-                        <td>{usuario.rol? usuario.rol.menu_rols.map(menus=> menus.menu.nombre_menu).join(', '): 'No tiene accesos'}</td>
+                        <td>{usuario.rol ? usuario.rol.menu_rols.map(menus => menus.menu.nombre_menu).join(', ') : 'No tiene accesos'}</td>
                         <td className="accion">
                           <button className="btn btn-primary boton" data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(usuario)}>Editar</button>
                           <button className="btn btn-danger boton" onClick={() => handleDarBaja(usuario)}>Baja</button>
@@ -529,7 +531,7 @@ const Usuario = () => {
                         <td>{usuario.correo}</td>
                         <td>{usuario.fecha_registro.slice(0, 10)}</td>
                         <td>{usuario?.rol?.nombre_rol}</td>
-                        <td>{usuario.rol? usuario.rol.menu_rols.map(menus=> menus.menu.nombre_menu).join(', '): 'No tiene accesos'}</td>
+                        <td>{usuario.rol ? usuario.rol.menu_rols.map(menus => menus.menu.nombre_menu).join(', ') : 'No tiene accesos'}</td>
                         <td className="accion">
                           <button className="btn btn-success boton2" onClick={() => handleDarReintegrar(usuario)}>Reintegrar</button>
                           <button className="btn btn-danger boton2" onClick={() => handleDarEliminar(usuario)}>Eliminar</button>

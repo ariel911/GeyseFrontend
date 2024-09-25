@@ -21,7 +21,7 @@ const servicio = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
     const [editSelectedTrabajo, setEditSelectedTrabajo] = useState([]);
-
+    const [isSubmitting, setIsSubmitting] = useState(false); 
     const usuario_Id = localStorage.getItem('id');
     const token = localStorage.getItem('token');
     useEffect(() => {
@@ -195,6 +195,7 @@ const servicio = () => {
 
         e.preventDefault();
         const valuesArray = editSelectedTrabajo?.map(item => item.value);
+
         try {
             await axios({
                 url: `https://backendgeyse.onrender.com/api/servicio/${selectedUser.id}`,
@@ -231,13 +232,15 @@ const servicio = () => {
 
             // Opcional: Mostrar una notificación o mensaje de éxito
         } catch (error) {
-
+            console.log("error:",error)
         }
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Realizar la solicitud para agregar el servicio
         const selectedEstados = selectedEstado.map((option) => option.value);
+        if (isSubmitting) return;
+        setIsSubmitting(true); 
         try {
             const response = await axios.post(
                 'https://backendgeyse.onrender.com/api/servicio',
@@ -279,12 +282,15 @@ const servicio = () => {
             // Opcional: Mostrar una notificación o mensaje de éxito
         } catch (error) {
             // Opcional: Mostrar una notificación o mensaje de error
+            console.log("error:",error)
             swal({
                 title: "Fallo en Agregar Servicio!",
                 /* text: "Por favor, completa todos los campos requeridos", */
                 icon: "error",
                 button: "Ok",
             });
+        }finally {
+            setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
         }
     };
 
@@ -455,8 +461,8 @@ const servicio = () => {
                             </div>
 
                             <div className="botones">
-                                <button type="submit" className="btn btn-primary botonservicio">
-                                    Agregar
+                                <button type="submit" className="btn btn-primary botonservicio" disabled={isSubmitting}>
+                                {isSubmitting ? 'Guardando...' : 'Guardar Servicio'}
                                 </button>
                             </div>
 

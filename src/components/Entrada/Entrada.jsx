@@ -93,9 +93,12 @@ const Entrada = () => {
     }
   });
   const clasificacion = {
+    HCFC: [],
+    AFFF: [],
+    H2O: [],
+    K: [],
     CO2: [],
     PQS: [],
-    K: [],
     OTROS: []
   };
 
@@ -115,9 +118,12 @@ extintores.forEach(extintor => {
 });
   // Calcular porcentajes
   const porcentajes = {
+    HCFC: (clasificacion.HCFC.length / totalActivos) * 100,
+    AFFF: (clasificacion.AFFF.length / totalActivos) * 100,
+    K: (clasificacion.K.length / totalActivos) * 100,
+    H2O: (clasificacion.H2O.length / totalActivos) * 100,
     CO2: (clasificacion.CO2.length / totalActivos) * 100,
     PQS: (clasificacion.PQS.length / totalActivos) * 100,
-    K: (clasificacion.K.length / totalActivos) * 100,
     OTROS: (clasificacion.OTROS.length / totalActivos) * 100
   };
   return (
@@ -244,7 +250,7 @@ extintores.forEach(extintor => {
 
           </div>
           <div>
-              <Export/>
+             {/*  <Export/> */}
           </div>
         </div>
       </div>

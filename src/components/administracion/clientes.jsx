@@ -16,6 +16,7 @@ const cliente = () => {
   const [clave, setClave] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const token = localStorage.getItem('token');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     handleGetUsers();
@@ -180,6 +181,10 @@ const cliente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Realizar la solicitud para agregar el cliente
+    if (isSubmitting) return;
+
+    setIsSubmitting(true); // Desactivar el botón de envío
+
     try {
       const response = await axios.post(
         'https://backendgeyse.onrender.com/api/cliente',
@@ -218,6 +223,15 @@ const cliente = () => {
       // Opcional: Mostrar una notificación o mensaje de éxito
     } catch (error) {
       // Opcional: Mostrar una notificación o mensaje de error
+      console.error("Error al agregar el cliente:", error);
+      swal({
+        title: "Error al agregar el cliente",
+        text: "Hubo un problema al procesar la solicitud. Por favor, intenta nuevamente.",
+        icon: "error",
+        button: "Ok",
+      });
+    } finally {
+      setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
     }
   };
 
@@ -274,7 +288,7 @@ const cliente = () => {
               </div>
               <div className="botones">
                 <div>
-                  <button type="submit" className="btn btn-primary botoncliente">Agregar</button>
+                  <button type="submit" className="btn btn-primary botoncliente" disabled={isSubmitting}> {isSubmitting ? 'Guardando...' : 'Guardar Extintor'}</button>
                 </div>
 
               </div>
