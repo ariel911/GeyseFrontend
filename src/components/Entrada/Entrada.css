@@ -1,15 +1,20 @@
-.contenidoEntrada {
-    width: 100%;
-    height: 100%;
-}
+
+    .contenidoEntrada {
+        width: 100%;
+        height: 153%;
+        background-color: white;
+        margin: 0 auto;
+        margin-top: 30px;
+    }
+
 
 .tarjetas {
     width: 100%;
-    height: 35%;
+    height: 10%;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    
+
 }
 
 .tarjeta {
@@ -96,7 +101,9 @@
 .botonEstadisticas {
     margin-top: 25px;
 }
-
+.estadisticas{
+    margin-top: 200px;
+}
 .NuevoFormato {
     width: 300px;
     height: 330px;
@@ -107,11 +114,7 @@
     text-align: center;
 }
 
-.estadisticas {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-}
+
 
 .barras h3 {
     text-align: center;
@@ -129,7 +132,7 @@
     }
     .contenidoEntrada {
         width: 70%;
-        height: 85%;
+        height: 93%;
         background-color: white;
         margin: 0 auto;
         margin-top: 30px;
@@ -137,6 +140,10 @@
 }
 @media (min-width: 769px) { 
     .tarjetas {
-        height: 25%;
+        height: 20%;
+    }
+    .estadisticas{
+        margin-top: 20px;
+        margin-left: 20px;
     }
 }

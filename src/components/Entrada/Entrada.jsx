@@ -17,7 +17,7 @@ const Entrada = () => {
   const [sucursales, setSucursales] = useState([]);
   const [inspeccions, setinspeccions] = useState([]);
   const token = localStorage.getItem('token');
-  
+
   useEffect(() => {
     handleGetClientes();
     handleGetServicios();
@@ -41,8 +41,8 @@ const Entrada = () => {
       url: "https://backendgeyse.onrender.com/api/servicio",
       method: "GET",
       headers: {
-      Authorization: `Bearer ${token}`,
-    },  
+        Authorization: `Bearer ${token}`,
+      },
     });
     setServicios(res.data.data.servicio);
   };
@@ -102,20 +102,20 @@ const Entrada = () => {
     OTROS: []
   };
 
-// Clasificar los extintores activos por tipo y contar el total de activos
-let totalActivos = 0;
+  // Clasificar los extintores activos por tipo y contar el total de activos
+  let totalActivos = 0;
 
-extintores.forEach(extintor => {
+  extintores.forEach(extintor => {
     if (extintor.estado === 1) {
-        totalActivos++;
-        const tipo = extintor.tipo.nombre_tipo.toUpperCase();
-        if (clasificacion[tipo]) {
-            clasificacion[tipo].push(extintor);
-        } else {
-            clasificacion.OTROS.push(extintor);
-        }
+      totalActivos++;
+      const tipo = extintor.tipo.nombre_tipo.toUpperCase();
+      if (clasificacion[tipo]) {
+        clasificacion[tipo].push(extintor);
+      } else {
+        clasificacion.OTROS.push(extintor);
+      }
     }
-});
+  });
   // Calcular porcentajes
   const porcentajes = {
     HCFC: (clasificacion.HCFC.length / totalActivos) * 100,
@@ -234,6 +234,57 @@ extintores.forEach(extintor => {
           </div>
           <div className='barra'>
             <div className='textoBarra'>
+              <p>AFFF</p>
+              <p>{porcentajes.AFFF.toFixed(2)}%</p>
+            </div>
+            <div className='progressBar'>
+              <div style={{
+                height: "100%",
+                width: `${porcentajes.AFFF.toFixed(2)}%`,
+                backgroundColor: "rgba(56, 104, 208, 0.5)",
+                transition: "width 0.5s",
+                borderRadius: "15px"
+              }}>
+              </div>
+            </div>
+
+          </div>
+          <div className='barra'>
+            <div className='textoBarra'>
+              <p>HCFC</p>
+              <p>{porcentajes.HCFC.toFixed(2)}%</p>
+            </div>
+            <div className='progressBar'>
+              <div style={{
+                height: "100%",
+                width: `${porcentajes.HCFC.toFixed(2)}%`,
+                backgroundColor: "rgba(56, 104, 208, 0.5)",
+                transition: "width 0.5s",
+                borderRadius: "15px"
+              }}>
+              </div>
+            </div>
+
+          </div>
+          <div className='barra'>
+            <div className='textoBarra'>
+              <p>H2O</p>
+              <p>{porcentajes.H2O.toFixed(2)}%</p>
+            </div>
+            <div className='progressBar'>
+              <div style={{
+                height: "100%",
+                width: `${porcentajes.H2O.toFixed(2)}%`,
+                backgroundColor: "rgba(56, 104, 208, 0.5)",
+                transition: "width 0.5s",
+                borderRadius: "15px"
+              }}>
+              </div>
+            </div>
+
+          </div>
+          <div className='barra'>
+            <div className='textoBarra'>
               <p>Otros</p>
               <p>{porcentajes.OTROS.toFixed(2)}%</p>
             </div>
@@ -250,7 +301,7 @@ extintores.forEach(extintor => {
 
           </div>
           <div>
-             {/*  <Export/> */}
+            {/*  <Export/> */}
           </div>
         </div>
       </div>
