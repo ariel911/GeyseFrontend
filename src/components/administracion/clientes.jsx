@@ -288,7 +288,7 @@ const cliente = () => {
               </div>
               <div className="botones">
                 <div>
-                  <button type="submit" className="btn btn-primary botoncliente" disabled={isSubmitting}> {isSubmitting ? 'Guardando...' : 'Guardar Extintor'}</button>
+                  <button type="submit" className="btn btn-primary botoncliente" disabled={isSubmitting}> {isSubmitting ? 'Guardando...' : 'Guardar Cliente'}</button>
                 </div>
 
               </div>
