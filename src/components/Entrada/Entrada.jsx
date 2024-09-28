@@ -171,9 +171,9 @@ const Entrada = () => {
 
       <div className='estadisticas'>
         <div className='barras'>
-          <h3 >Estadisticas</h3>
+          <h4 >Estadisticas</h4>
 
-          <h4>Extintores</h4>   <br />
+          <h5>Extintores</h5>   <br />
           <div className='textoExtintores'>
             <span className='totalExtintores'>Total:{extintores.length}</span>
             <span className='activosExtintores'>Activos:{activos}</span>

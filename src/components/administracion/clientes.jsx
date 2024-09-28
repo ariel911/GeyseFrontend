@@ -324,17 +324,32 @@ const cliente = () => {
                     ?.filter(cliente => cliente.estado === 1) // Filtrar clientes activos
                     .map((cliente, index) => (
                       <tr key={cliente.id}>
-                        <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                        <td>{index + 1}</td>
                         <td>{cliente?.codigo}</td>
                         <td>{cliente.nombre_cliente}</td>
                         <td>{cliente.nombre_encargado}</td>
                         <td>{cliente.fecha_registro.slice(0, 10)}</td>
                         <td className="accion">
-                          <button className='btn btn-primary boton' data-bs-toggle="modal" data-bs-target="#modalEdit" data-bs-whatever="@mdo" onClick={() => handleEditUser(cliente)}>Editar</button>
-                          <button className='btn btn-danger boton' onClick={() => handleDarBaja(cliente)}>Baja</button>
+                          <button
+                            className='btn btn-primary boton'
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEdit"
+                            data-bs-whatever="@mdo"
+                            onClick={() => handleEditUser(cliente)}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            className='btn btn-danger boton'
+                            onClick={() => handleDarBaja(cliente)}
+                          >
+                            Baja
+                          </button>
                         </td>
                       </tr>
-                    ))}
+
+                    ))
+                  }
                 </tbody>
               </table>
             </div>

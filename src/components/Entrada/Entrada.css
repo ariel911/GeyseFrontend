@@ -1,19 +1,20 @@
 
     .contenidoEntrada {
         width: 100%;
-        height: 153%;
-        background-color: white;
+        height: 100%;
         margin: 0 auto;
         margin-top: 30px;
+        
     }
 
 
 .tarjetas {
     width: 100%;
-    height: 10%;
+    height: 40%;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
+
 
 }
 
@@ -38,7 +39,7 @@
 .texto1 {
     width: 70%;
     text-align: center;
-    padding: 15px;
+    
 }
 
 .texto1 span {
@@ -51,14 +52,8 @@
     color: rgb(45, 45, 45);
 }
 
-.button {
-    margin-top: 15px;
-}
 
-.buscar {
-    color: aqua;
-    background-color: black;
-}
+
 
 .icone {
     font-size: 30px;
@@ -102,21 +97,14 @@
     margin-top: 25px;
 }
 .estadisticas{
-    margin-top: 200px;
-}
-.NuevoFormato {
-    width: 300px;
-    height: 330px;
-    margin-top: 20px
-}
-
-.NuevoFormato h3 {
-    text-align: center;
+    margin-top: 20px;
+    background-color: white;
+    padding-top: 3px;
 }
 
 
 
-.barras h3 {
+.barras h4 {
     text-align: center;
 }
 
@@ -124,7 +112,7 @@
     margin-right: 15px;
 }
 .textoExtintores{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 @media (min-width: 420px) { 
     .tarjetas {
@@ -132,10 +120,10 @@
     }
     .contenidoEntrada {
         width: 70%;
-        height: 93%;
-        background-color: white;
+        height: 100%;
+        background-color: rgb(255, 255, 255);
         margin: 0 auto;
-        margin-top: 30px;
+  
     }
 }
 @media (min-width: 769px) { 
@@ -143,7 +131,11 @@
         height: 20%;
     }
     .estadisticas{
-        margin-top: 20px;
+       
         margin-left: 20px;
+        background-color: rgb(255, 255, 255);
+        height: 100%;
+        height: 75%;
     }
+    
 }

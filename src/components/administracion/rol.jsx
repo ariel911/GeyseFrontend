@@ -46,7 +46,7 @@ const Rol = () => {
         if (isSubmitting) return;
 
         setIsSubmitting(true); // Desactivar el botón de envío
-        
+
 
         try {
             const response = await axios.post(
@@ -74,7 +74,7 @@ const Rol = () => {
             handleGetUsers();
         } catch (error) {
             console.error(error);
-        }finally {
+        } finally {
             setIsSubmitting(false); // Rehabilitar el botón después de la solicitud
         }
     };
@@ -309,17 +309,27 @@ const Rol = () => {
                                     ?.filter(rol => rol.estado == 1) // Filtrar cargos con estado 1
                                     .map((rol, index) => (
                                         <tr key={rol.id}>
-                                            <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
+                                            <td>{index + 1}</td>
                                             <td>{rol.nombre_rol}</td>
                                             <td>
-                                                {rol.menu_rols.length > 0 ?
-                                                    rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
+                                                {rol.menu_rols.length > 0
+                                                    ? rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
                                                     : 'No tiene menús'}
                                             </td>
-                                            <td>{rol.estado == 1 ? 'activo' : 'no activo'}</td>
-                                            <td className='accion'>
-                                                <button className='btn btn-danger boton' onClick={() => handleDarBaja(rol)}>Baja</button>
-                                                <button className='btn btn-primary boton' onClick={() => handleEditClick(rol)} data-bs-toggle="modal" data-bs-target="#modalEdit">Editar</button>
+                                            <td>{rol.estado === 1 ? 'activo' : 'no activo'}</td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-primary"
+                                                    onClick={() => handleEditClick(rol)}
+                                                >
+                                                    Editar
+                                                </button>
+                                                <button
+                                                    className="btn btn-danger"
+                                                    onClick={() => handleDarBaja(rol)}
+                                                >
+                                                    Dar Baja
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
@@ -343,24 +353,36 @@ const Rol = () => {
                             </thead>
                             <tbody>
                                 {rol
-                                    ?.filter(rol => rol.estado == 0) // Filtrar roles con estado 0
+                                    ?.filter(rol => rol.estado === 0) // Filtrar roles con estado 0 (uso de igualdad estricta)
                                     .map((rol, index) => (
                                         <tr key={rol.id}>
                                             <td>{index + 1}</td> {/* Numeración basada en la lista filtrada */}
                                             <td>{rol.nombre_rol}</td>
                                             <td>
-                                                {rol.menu_rols.length > 0 ?
-                                                    rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
+                                                {rol.menu_rols.length > 0
+                                                    ? rol.menu_rols.map(menuRol => menuRol.menu.nombre_menu).join(', ')
                                                     : 'No tiene menús'}
                                             </td>
-                                            <td>{rol.estado == 1 ? 'activo' : 'no activo'}</td>
+                                            <td>{rol.estado === 1 ? 'activo' : 'no activo'}</td>
                                             <td className='accion'>
-                                                <button className='btn btn-success boton2' onClick={() => handleDarReintegrar(rol)}>Reintegrar</button>
-                                                <button className='btn btn-danger boton2' onClick={() => handleDarEliminar(rol)}>Eliminar</button>
+                                                <button
+                                                    className='btn btn-success boton2'
+                                                    onClick={() => handleDarReintegrar(rol)}
+                                                >
+                                                    Reintegrar
+                                                </button>
+                                                <button
+                                                    className='btn btn-danger boton2'
+                                                    onClick={() => handleDarEliminar(rol)}
+                                                >
+                                                    Eliminar
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
                             </tbody>
+
+
                         </table>
                     </div>
                 </div>
