@@ -51,7 +51,9 @@ const Reportes = () => {
     };
 
     // Obtener los clientes en el formato adecuado para react-select
-    const opcionesClientes = clientes.map((cliente) => ({
+    const opcionesClientes = clientes
+    .filter(cliente => cliente.estado === 1)
+    .map(cliente => ({
         value: cliente.id,
         label: cliente.nombre_cliente
     }));
@@ -534,10 +536,13 @@ const Reportes = () => {
         setSucursales(res.data.data.sucursal);
     };
     // Opciones del select de sucursales
-    const opcionesSucursal = sucursales.map((sucursal) => ({
+    const opcionesSucursal = sucursales
+    .filter(sucursal => sucursal.estado === 1 && sucursal.cliente.estado === 1)
+    .map(sucursal => ({
         value: sucursal.id, // Identificador de la sucursal
         label: sucursal.nombre_sucursal, // Nombre de la sucursal
     }));
+
     return (
         <div className="reportes">
             <h2 className="text-center mt-3">Reportes</h2>
