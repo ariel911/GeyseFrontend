@@ -320,7 +320,11 @@ const Rol = () => {
                                             <td>
                                                 <button
                                                     className="btn btn-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEdit"
+                                                    data-bs-whatever="@mdo"
                                                     onClick={() => handleEditClick(rol)}
+
                                                 >
                                                     Editar
                                                 </button>
